@@ -1,12 +1,13 @@
 # Align with Vagrantfile
-export ORG=acme             # CAUTION: PARSED IN VAGRANTFILE - EDIT BUT DON'T RENAME OR REMOVE !!!
-export TLD=localdomain      # CAUTION: PARSED IN VAGRANTFILE - EDIT BUT DON'T RENAME OR REMOVE !!!
-export IP_PREFIX=192.168.56 # CAUTION: PARSED IN VAGRANTFILE - EDIT BUT DON'T RENAME OR REMOVE !!!
+export ORG=acme             # CAUTION: PARSED IN VAGRANTFILE - EDIT IT, BUT DON'T RENAME OR REMOVE !!!
+export TLD=localdomain      # CAUTION: PARSED IN VAGRANTFILE - EDIT IT, BUT DON'T RENAME OR REMOVE !!!
+export IP_PREFIX=192.168.56 # CAUTION: PARSED IN VAGRANTFILE - EDIT IT, BUT DON'T RENAME OR REMOVE !!!
+export SERVER_SUFFIX=10     # CAUTION: PARSED IN VAGRANTFILE - EDIT IT, BUT DON'T RENAME OR REMOVE !!!
 export DOMAIN=${ORG}.${TLD}
 
 # LDAP
 export LDAP_NAME="authx.${DOMAIN}"
-export LDAP_IP=192.168.56.100
+export LDAP_IP=${IP_PREFIX}.${SERVER_SUFFIX}
 export BASE="dc=${ORG},dc=${TLD}"
 export LDAP_ADMIN="cn=admin,${BASE}"
 export LDAP_PASSWORD="ldapsecret"
@@ -21,7 +22,7 @@ export USERS
 
 # KRB5
 export KDC_NAME="authx.${DOMAIN}"
-export KDC_IP=192.168.56.100
+export KDC_IP=${IP_PREFIX}.${SERVER_SUFFIX}
 export REALM=$(echo "$DOMAIN" | tr '[:lower:]' '[:upper:]')
 export KDC_ADMIN="admin"
 export KDC_PASSWORD="krb5secret"

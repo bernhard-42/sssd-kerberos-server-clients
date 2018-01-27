@@ -2,6 +2,7 @@ Vagrant.configure("2") do |config|
   org = ""
   tld = ""
   ipprefix = ""
+  serversuffix = -1
 
   File.open("./config.sh", "r") do |f|
     f.each_line do |line|
@@ -14,14 +15,16 @@ Vagrant.configure("2") do |config|
           tld = kv[1]
         elsif kv[0] == "IP_PREFIX"
           ipprefix = kv[1]
+        elsif kv[0] == "SERVER_SUFFIX"
+          serversuffix = Integer(kv[1])
         end
       end
     end
   end
   domain = "#{org}.#{tld}"
-  puts "Parsed config: #{domain}, #{ipprefix}"
+  puts "Parsed config: domain=#{domain}, server=#{ipprefix}.#{serversuffix}"
 
-  ipsuffix = ["100"               , "101"              , "101"                  ]
+  ipsuffix = [serversuffix        , serversuffix + 1   , serversuffix + 2       ]
   name     = ["authx"             , "c73"              , "u1604"                ]
   memory   = [1024                , 1024               , 1024                   ]
   cpus     = [1                   , 1                  , 1                      ]
@@ -43,9 +46,11 @@ Vagrant.configure("2") do |config|
       box.vm.box_check_update = false
       box.vm.network "private_network", ip: "#{ipprefix}.#{ipsuffix[i]}"
       box.vm.provider "virtualbox" do |vb|
-        vb.gui = false
+        vb.gui = true
         vb.memory = memory[i]
         vb.cpus = cpus[i]
+        vb.customize ["storageattach", :id, "--storagectl", "IDE Controller", "--port", "0", "--device", "1",
+                      "--type", "dvddrive", "--medium", "emptydrive"]
       end
 
       box.vm.provision "shell", inline: <<-SHELL
