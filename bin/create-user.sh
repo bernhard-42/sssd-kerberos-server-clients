@@ -37,7 +37,7 @@ cn: ${FNAME} ${SNAME}
 displayName: ${SNAME}, ${FNAME}
 uidNumber: ${UID_NUMBER}
 gidNumber: ${UID_NUMBER}
-userPassword: ${USER_PASSWORD}
+userPassword: ${PASSWORD}
 gecos: ${FNAME} ${SNAME}
 loginShell: /bin/bash
 homeDirectory: /home/${U_ID}
