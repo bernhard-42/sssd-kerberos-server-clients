@@ -1,6 +1,5 @@
 Vagrant.configure("2") do |config|
-  org = ""
-  tld = ""
+  domain = ""
   ipprefix = ""
   serversuffix = -1
 
@@ -9,10 +8,8 @@ Vagrant.configure("2") do |config|
       parts = line.split
       if parts[0] == "export"
         kv = parts[1].split("=")
-        if kv[0] == "ORG"
-          org = kv[1]
-        elsif kv[0] == "TLD"
-          tld = kv[1]
+        if kv[0] == "DOMAIN"
+          domain = kv[1]
         elsif kv[0] == "IP_PREFIX"
           ipprefix = kv[1]
         elsif kv[0] == "SERVER_SUFFIX"
@@ -21,7 +18,6 @@ Vagrant.configure("2") do |config|
       end
     end
   end
-  domain = "#{org}.#{tld}"
   puts "Parsed config: domain=#{domain}, server=#{ipprefix}.#{serversuffix}"
 
   ipsuffix = [serversuffix        , serversuffix + 1   , serversuffix + 2       ]

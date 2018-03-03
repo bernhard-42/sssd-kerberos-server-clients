@@ -12,5 +12,5 @@ loginfo "... done\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 loginfo "1.2 Installing OS tools"
 
-apt-get install -y ntp ntpdate rng-tools
+apt-get install -y ntp ntpdate rng-tools gnutls-bin ssl-cert
 loginfo "... done\n"

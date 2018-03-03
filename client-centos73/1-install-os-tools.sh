@@ -10,6 +10,5 @@ loginfo "... done\n"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 loginfo "1.2 Installing OS tools"
-
 yum install -y ntp ntpdate rng-tools
 loginfo "... done\n"

@@ -8,7 +8,7 @@ export DEBIAN_FRONTEND=noninteractive
 loginfo "3 Installing packages"
 
 cat > /root/debconf-slapd.conf << EOF
-slapd shared/organization string ACME AG
+slapd shared/organization string ${LDAP_ORG}
 slapd slapd/backend select MDB
 slapd slapd/domain string ${DOMAIN}
 slapd slapd/dump_database select when needed
@@ -31,5 +31,5 @@ apt-get install -y ldap-utils slapd phpldapadmin
 rm /root/debconf-slapd.conf
 
 loginfo "Validation"
-loginfo "LDAP admin in $(ldapsearch -x -LLL -H ldap:/// -b dc=${ORG},dc=${TLD} dn)"
+loginfo "LDAP admin in $(ldapsearch -x -LLL -H ldap:/// -b ${BASE} dn)"
 loginfo "... done\n"

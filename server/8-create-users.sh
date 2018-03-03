@@ -2,7 +2,7 @@
 DIR=$(dirname $0) && source "$DIR/../config.sh"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-loginfo "7.1 Creating group"
+loginfo "8.1 Creating group"
 
 for USER_GROUP in ${USER_GROUPS}; do
     GROUP_ID=${USER_GROUP#*:}
@@ -13,10 +13,10 @@ done
 loginfo "done\n"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-loginfo "7.2 Creating users"
+loginfo "8.2 Creating users"
 
 for USR in ${USERS}; do
-    # USER = uid-number:uid:fname:sname:password:group_names
+    # Format of a user: uid-number:uid:fname:sname:password:group_names
     IFS=':' read -r -a ATTR <<< "$USR"
     UID_NUMBER="${ATTR[0]}"
     U_ID="${ATTR[1]}"

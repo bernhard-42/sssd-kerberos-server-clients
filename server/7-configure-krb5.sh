@@ -3,7 +3,7 @@ DIR=$(dirname $0) && source "$DIR/../config.sh"
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-loginfo "Configuring LDAP to work as kerberos backend"
+loginfo "7.1 Configuring LDAP to work as kerberos backend"
 
 gzip -d /usr/share/doc/krb5-kdc-ldap/kerberos.schema.gz
 cp /usr/share/doc/krb5-kdc-ldap/kerberos.schema /etc/ldap/schema/
@@ -69,7 +69,7 @@ loginfo "done\n"
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-loginfo "Creating krb5.conf"
+loginfo "7.2 Creating krb5.conf"
 
 cat > /etc/krb5.conf << EOF
 [libdefaults]
@@ -117,7 +117,7 @@ loginfo "done\n"
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-loginfo "6.1 Creating REALM"
+loginfo "7.3 Creating REALM"
 
 kdb5_ldap_util -D ${LDAP_ADMIN} create -subtrees ${BASE} -r ${REALM} -s -H ldap://$(hostname -f) << EOF
 ${LDAP_PASSWORD}
@@ -127,7 +127,7 @@ EOF
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-loginfo "6.2 Creating stash"
+loginfo "7.4 Creating stash"
 
 kdb5_ldap_util -D ${LDAP_ADMIN} stashsrvpw -f /etc/krb5kdc/service.keyfile cn=admin,${BASE} << EOF
 ${LDAP_PASSWORD}
@@ -139,7 +139,7 @@ loginfo "done\n"
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-loginfo "6.3 Restarting KDC"
+loginfo "7.5 Restarting KDC"
 
 systemctl start krb5-kdc
 systemctl start krb5-admin-server
@@ -148,7 +148,7 @@ loginfo "done\n"
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-loginfo "6.4 Creating KDC admin user"
+loginfo "7.6 Creating KDC admin user"
 
 kadmin.local -q "addprinc -clearpolicy -pw ${KDC_PASSWORD} ${KDC_ADMIN}/admin@${REALM}"
 echo "*/admin@${REALM}    *" > /etc/krb5kdc/kadm5.acl

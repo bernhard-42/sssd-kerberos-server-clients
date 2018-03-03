@@ -1,35 +1,56 @@
-# Align with Vagrantfile
-export ORG=acme             # CAUTION: PARSED IN VAGRANTFILE - EDIT IT, BUT DON'T RENAME OR REMOVE !!!
-export TLD=localdomain      # CAUTION: PARSED IN VAGRANTFILE - EDIT IT, BUT DON'T RENAME OR REMOVE !!!
-export IP_PREFIX=192.168.56 # CAUTION: PARSED IN VAGRANTFILE - EDIT IT, BUT DON'T RENAME OR REMOVE !!!
-export SERVER_SUFFIX=10     # CAUTION: PARSED IN VAGRANTFILE - EDIT IT, BUT DON'T RENAME OR REMOVE !!!
-export DOMAIN=${ORG}.${TLD}
+#  ------------ Align with Vagrantfile ------------ 
+export DOMAIN=poc.acme.localdomain   # CAUTION: EDIT IT, BUT DON'T RENAME OR REMOVE IT (IT IS PARSED IN VAGRANTFILE) !
+export IP_PREFIX=192.168.56          # CAUTION: EDIT IT, BUT DON'T RENAME OR REMOVE IT (IT IS PARSED IN VAGRANTFILE) !
+export SERVER_SUFFIX=10              # CAUTION: EDIT IT, BUT DON'T RENAME OR REMOVE IT (IT IS PARSED IN VAGRANTFILE) !
 
-# LDAP
+export REPO_PATH=/vagrant
+
+# ------------ LDAP ------------
+export LDAP_ORG="Acme AG"
 export LDAP_NAME="authx.${DOMAIN}"
 export LDAP_IP=${IP_PREFIX}.${SERVER_SUFFIX}
-export BASE="dc=${ORG},dc=${TLD}"
+IFS='.' read -r -a PARTS <<< "$DOMAIN"
+export BASE=$(printf ",dc=%s" "${PARTS[@]}"  | cut -c2-)
 export LDAP_ADMIN="cn=admin,${BASE}"
 export LDAP_PASSWORD="ldapsecret"
 
-export USER_GROUPS="admins:10000 staff:10020 all%20users:10040 acme%20users:10060 acme%20admins:10080"
-# USER = uid-number:uid:fname:sname:password:group_names
-USERS="10000:admin:Admin:Admin:secret:admins,all%20users,acme%20admins"
-USERS="10001:alice:Alice:Amber:secret:staff,all%20users,acme%20users $USERS"
-USERS="10002:bob:Bob:Black:secret:staff,all%20users,acme%20users $USERS"
-USERS="10003:mallory:Mallory:Mint:secret:staff,all%20users,acme%20users $USERS"
+export LDAP_CERT_EXPIRY=3650
+export LDAP_CERT_CN="Bernhard Walter"
+export LDAP_CERT_BITS=1024
+
+# ------------ Users and groups ------------
+DEFAULT_ADMIN_GROUP="admins"
+DEFAULT_GROUP="staff"
+GROUP1="all%20users"
+GROUP2="acme_users"
+GROUP3="acme_admins"
+DEFAULT_PW="secret"
+export USER_GROUPS="${DEFAULT_ADMIN_GROUP}:10000 ${DEFAULT_GROUP}:10020 ${GROUP1}:10040 ${GROUP2}:10060 ${GROUP3}:10080"
+# Format of a user: uid-number:uid:fname:sname:password:group_names
+USERS="10000:admin:Admin:Admin:${DEFAULT_PW}:${DEFAULT_ADMIN_GROUP},${GROUP1},${GROUP3}"
+USERS="10001:alice:Alice:Amber:${DEFAULT_PW}:${DEFAULT_GROUP},${GROUP1},${GROUP2} $USERS"
+USERS="10002:bob:Bob:Black:${DEFAULT_PW}:${DEFAULT_GROUP},${GROUP1},${GROUP2} $USERS"
+USERS="10003:mallory:Mallory:Mint:${DEFAULT_PW}:${DEFAULT_GROUP},${GROUP1},${GROUP2} $USERS"
 export USERS
 
-# KRB5
-export KDC_NAME="authx.${DOMAIN}"
-export KDC_IP=${IP_PREFIX}.${SERVER_SUFFIX}
-export REALM=$(echo "$DOMAIN" | tr '[:lower:]' '[:upper:]')
-export KDC_ADMIN="admin"
-export KDC_PASSWORD="krb5secret"
-export KDC_MASTER_KEY="mastersecret"
+# ------------ KRB5 ------------
+export USE_KRB5=1
+if [ $USE_KRB5 -eq 1 ]; then
+    export KDC_NAME="authx.${DOMAIN}"
+    export KDC_IP=${IP_PREFIX}.${SERVER_SUFFIX}
+    export REALM=$(echo "$DOMAIN" | tr '[:lower:]' '[:upper:]')
+    export KDC_ADMIN="admin"
+    export KDC_PASSWORD="krb5secret"
+    export KDC_MASTER_KEY="mastersecret"
+fi
+
+# ------------ Coloured log outout ------------
+ESC=$'\033'
+YELLOW="${ESC}[1;33m"
+GREEN="${ESC}[1;32m"
+RED="${ESC}[1;31m"
+NC="${ESC}[0m"
 
 function loginfo {
-    YELLOW='\e[1;33m'
-    NC='\e[0m'
     echo -e "${YELLOW} >>>>> $@${NC}"
 }

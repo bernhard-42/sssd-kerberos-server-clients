@@ -6,15 +6,15 @@ if [ "x$2" == "x" ]; then
     exit 1
 fi
 
-loginfo "Creating group (gid=${GROUP_ID} name='${GROUP_NAME/\%20/ }'):"
-
 GROUP_ID=$1
-GROUP_NAME=$2
+GROUP_NAME=${2/\%20/ }
+
+loginfo "Creating group (gid=${GROUP_ID} name='${GROUP_NAME}'):"
 
 cat > /root/group.ldif << EOF
-dn: cn=${GROUP_NAME/\%20/ },ou=Groups,${BASE}
+dn: cn=${GROUP_NAME},ou=Groups,${BASE}
 objectClass: posixGroup
-cn: ${GROUP_NAME/\%20/ }
+cn: ${GROUP_NAME}
 gidNumber: ${GROUP_ID}
 EOF
 

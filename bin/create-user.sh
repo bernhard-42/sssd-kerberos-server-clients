@@ -25,7 +25,7 @@ loginfo "done"
 
 loginfo "Creating user in LDAP (id=${UID_NUMBER} uid=${U_ID} fname=${FNAME} sname=${SNAME} gid=${GROUP_ID} pw=${PASSWORD})":
 
-cat >> /root/user.ldif << EOF
+cat << EOF >> /root/user.ldif
 dn: uid=${U_ID},ou=People,${BASE}
 objectClass: inetOrgPerson
 objectClass: posixAccount
@@ -55,13 +55,13 @@ loginfo "Adding group memberships"
 IFS=',' read -r -a ALL_GROUP_NAMES <<< "$GROUP_NAMES"
 
 for GROUP_NAME in "${ALL_GROUP_NAMES[@]}"; do
-    cat >> /root/group.ldif << EOF
+    cat << EOF >> /root/group.ldif 
 dn: cn=${GROUP_NAME/\%20/ },ou=Groups,${BASE}
 changetype: modify
 add: memberuid
 memberuid: ${U_ID}
 EOF
-
+    cat /root/group.ldif
     ldapmodify -x -D ${LDAP_ADMIN} -w ${LDAP_PASSWORD} -f /root/group.ldif
 
     rm -f /root/group.ldif
@@ -69,9 +69,10 @@ done
 
 loginfo "done"
 
+if [ ${USE_KRB5} -eq 1 ]; then
+    loginfo "Adding user to KDC"
 
-loginfo "Adding user to KDC"
+    kadmin.local -q "addprinc -clearpolicy -x dn=\"uid=${U_ID},ou=People,${BASE}\" -pw ${PASSWORD} ${U_ID}"
 
-kadmin.local -q "addprinc -clearpolicy -x dn=\"uid=${U_ID},ou=people,${BASE}\" -pw ${PASSWORD} ${U_ID}"
-
-loginfo "done"
+    loginfo "done"
+fi

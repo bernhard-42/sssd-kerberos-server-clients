@@ -30,11 +30,20 @@ ldap_uri = ldap://${LDAP_NAME}
 ldap_search_base = ${BASE}
 enumerate = true
 cache_credentials = true
-
-auth_provider = krb5
-krb5_server = ${KDC_NAME}
-krb5_realm = ${REALM}
 EOF
+
+if [ ${USE_KRB5} -eq 1 ]; then
+    cat << EOF > /etc/sssd/sssd.conf
+    auth_provider = krb5
+    krb5_server = ${KDC_NAME}
+    krb5_realm = ${REALM}
+EOF
+else
+    cat << EOF > /etc/sssd/sssd.conf
+    auth_provider = ldap
+EOF
+fi
+
 
 chmod 600 /etc/sssd/sssd.conf
 

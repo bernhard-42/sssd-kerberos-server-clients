@@ -5,7 +5,7 @@ DIR=$(dirname $0) && source "$DIR/../config.sh"
 export DEBIAN_FRONTEND=noninteractive
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-loginfo "5 Installing Kerberos modules"
+loginfo "6 Installing Kerberos modules"
 
 cat > /root/debconf-krb5.conf << EOF
 krb5-config krb5-config/default_realm string ${REALM}
