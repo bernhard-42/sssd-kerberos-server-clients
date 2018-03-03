@@ -2,11 +2,15 @@
 
 ## Create Authentication Server
 
+Edit `config.sh` and adapt at least `DOMAIN` , `IP_PREFIX` , `SERVER_SUFFIX` , `LDAP_ORG` , `USE_KRB5`.
+
 ```bash
 vagrant up authx
 ```
 
 ## Create centos 7.3 client
+
+Copy `config.sh` and `/etc/ssl/certs/cacert.pem` from server (`authx`) to the installer directory on the client,
 
 ```bash
 vagrant up c73
@@ -23,14 +27,6 @@ ldapwhoami -x -H ldap://authx.$DOMAIN -D "uid=alice,ou=People,$BASE" -w $PASSWOR
 ## Test SSSD
 
 Log into Centos 7.3 machine (c73)
-
-Copy `/etc/ssl/certs/cacert.pem` from server to the installer directory on the client (REPO_DIR), e.g.
-
-```bash
-cp /etc/ssl/certs/cacert.pem /vagrant
-````
-
-(since /vagrant is the shared installer root) and then execute
 
 ```bash
 vagrant ssh c73

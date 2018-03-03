@@ -1,9 +1,11 @@
 #  ------------ Align with Vagrantfile ------------ 
-export DOMAIN=poc.acme.localdomain   # CAUTION: EDIT IT, BUT DON'T RENAME OR REMOVE IT (IT IS PARSED IN VAGRANTFILE) !
-export IP_PREFIX=192.168.56          # CAUTION: EDIT IT, BUT DON'T RENAME OR REMOVE IT (IT IS PARSED IN VAGRANTFILE) !
-export SERVER_SUFFIX=10              # CAUTION: EDIT IT, BUT DON'T RENAME OR REMOVE IT (IT IS PARSED IN VAGRANTFILE) !
+export DOMAIN=poc.acme.localdomain   # CAUTION: Edit it, but don't rename or remove it (it is parsed in Vagrantfile) !
+export IP_PREFIX=192.168.56          # CAUTION: Edit it, but don't rename or remove it (it is parsed in Vagrantfile) !
+export SERVER_SUFFIX=10              # CAUTION: Edit it, but don't rename or remove it (it is parsed in Vagrantfile) !
 
+# ------------ Common settings ------------
 export REPO_PATH=$(pwd)
+export USE_KRB5=0                    # Edit KRB5 section below, if set to 1
 
 # ------------ LDAP ------------
 export LDAP_ORG="Acme AG"
@@ -34,7 +36,6 @@ USERS="10003:mallory:Mallory:Mint:${DEFAULT_PW}:${DEFAULT_GROUP},${GROUP1},${GRO
 export USERS
 
 # ------------ KRB5 ------------
-export USE_KRB5=1
 if [ $USE_KRB5 -eq 1 ]; then
     export KDC_NAME="authx.${DOMAIN}"
     export KDC_IP=${IP_PREFIX}.${SERVER_SUFFIX}
