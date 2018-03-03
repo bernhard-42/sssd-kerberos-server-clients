@@ -3,7 +3,7 @@ export DOMAIN=poc.acme.localdomain   # CAUTION: EDIT IT, BUT DON'T RENAME OR REM
 export IP_PREFIX=192.168.56          # CAUTION: EDIT IT, BUT DON'T RENAME OR REMOVE IT (IT IS PARSED IN VAGRANTFILE) !
 export SERVER_SUFFIX=10              # CAUTION: EDIT IT, BUT DON'T RENAME OR REMOVE IT (IT IS PARSED IN VAGRANTFILE) !
 
-export REPO_PATH=/vagrant
+export REPO_PATH=$(pwd)
 
 # ------------ LDAP ------------
 export LDAP_ORG="Acme AG"
