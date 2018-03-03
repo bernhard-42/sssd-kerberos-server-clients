@@ -3,7 +3,7 @@ DIR=$(dirname $0) && source "$DIR/../config.sh"
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-loginfo "Creating krb5.conf"
+loginfo "6 Creating krb5.conf"
 
 cat > /etc/krb5.conf << EOF
 [libdefaults]

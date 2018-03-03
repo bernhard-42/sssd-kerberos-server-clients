@@ -3,8 +3,8 @@ DIR=$(dirname $0) && source "$DIR/../config.sh"
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-loginfo "Installing SSSD"
+loginfo "3 Installing OpenLDAP cliewnt module"
 
-yum install -y sssd sssd-tools
+yum install -y openldap-clients
 
 loginfo "done\n"

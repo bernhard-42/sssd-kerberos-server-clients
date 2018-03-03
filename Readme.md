@@ -24,6 +24,14 @@ ldapwhoami -x -H ldap://authx.$DOMAIN -D "uid=alice,ou=People,$BASE" -w $PASSWOR
 
 Log into Centos 7.3 machine (c73)
 
+Copy `/etc/ssl/certs/cacert.pem` from server to the installer directory on the client (REPO_DIR), e.g.
+
+```bash
+cp /etc/ssl/certs/cacert.pem /vagrant
+````
+
+(since /vagrant is the shared installer root) and then execute
+
 ```bash
 vagrant ssh c73
 ```
