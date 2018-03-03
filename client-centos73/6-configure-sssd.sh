@@ -33,13 +33,13 @@ cache_credentials = true
 EOF
 
 if [ ${USE_KRB5} -eq 1 ]; then
-    cat << EOF > /etc/sssd/sssd.conf
+    cat << EOF >> /etc/sssd/sssd.conf
     auth_provider = krb5
     krb5_server = ${KDC_NAME}
     krb5_realm = ${REALM}
 EOF
 else
-    cat << EOF > /etc/sssd/sssd.conf
+    cat << EOF >> /etc/sssd/sssd.conf
     auth_provider = ldap
 EOF
 fi
@@ -52,9 +52,13 @@ loginfo "done\n"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # loginfo "Configuring PAM for SSSD"
+if [ ${USE_KRB5} -eq 1 ]; then
+    ENABLE_KRB5="--enablekrb5"
+else
+    ENABLE_KRB5=""
+fi
 
-authconfig --enablesssd --enablesssdauth --enablemkhomedir --enablekrb5 --update
-
+authconfig --enablesssd --enablesssdauth --enablemkhomedir ${ENABLE_KRB5} --update
 # loginfo "done\n"
 
 systemctl reload sshd
