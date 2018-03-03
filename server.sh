@@ -11,3 +11,4 @@ if [ ${USE_KRB5} -eq 1 ]; then
     ${REPO_PATH}/server/7-configure-krb5.sh
 fi
 ${REPO_PATH}/server/8-create-users.sh
+${REPO_PATH}/server/9-change-access-control.sh

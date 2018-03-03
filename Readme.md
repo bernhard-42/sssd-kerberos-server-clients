@@ -12,6 +12,14 @@ vagrant up authx
 vagrant up c73
 ```
 
+## Test LDAP
+Check Authentication against LDAP only
+
+```bash
+ldapwhoami -x -H ldap://authx.$DOMAIN -D "uid=alice,ou=People,$BASE" -w $PASSWORD
+```
+
+
 ## Test SSSD
 
 Log into Centos 7.3 machine (c73)
