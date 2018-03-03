@@ -4,13 +4,13 @@ DIR=$(dirname $0) && source "$DIR/../config.sh"
 # Source: https://help.ubuntu.com/lts/serverguide/openldap-server.html#openldap-tls
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-loginfo "Create a private key for the Certificate Authority"
+loginfo "5.1 Create a private key for the Certificate Authority"
 certtool --generate-privkey > /etc/ssl/private/cakey.pem
 loginfo "... done\n"
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-loginfo "Create the template/file /etc/ssl/ca.info to define the CA"
+loginfo "5.2 Create the template/file /etc/ssl/ca.info to define the CA"
 cat <<EOF > /etc/ssl/ca.info
 cn = ${LDAP_CERT_CN}
 ca
@@ -20,7 +20,7 @@ loginfo "... done\n"
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-loginfo "Create the self-signed CA certificate"
+loginfo "5.3 Create the self-signed CA certificate"
 certtool --generate-self-signed \
          --load-privkey /etc/ssl/private/cakey.pem \
          --template /etc/ssl/ca.info \
@@ -28,7 +28,7 @@ certtool --generate-self-signed \
 loginfo "... done\n"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-loginfo "Einen privaten Schlüssel für den Server erstellen"
+loginfo "5.4 Einen privaten Schlüssel für den Server erstellen"
 certtool --generate-privkey \
          --bits $LDAP_CERT_BITS \
          --outfile /etc/ssl/private/${LDAP_NAME}_slapd_key.pem
@@ -36,7 +36,7 @@ loginfo "... done\n"
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-loginfo "Erstellen Sie das Server-Zertifikat"
+loginfo "5.5 Erstellen Sie das Server-Zertifikat"
 cat <<EOF >/etc/ssl/${LDAP_NAME}.info
 organization = ${LDAP_ORG}
 cn = ${LDAP_NAME}
@@ -56,21 +56,21 @@ loginfo "... done\n"
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-loginfo "Adjust permissions and ownership"
+loginfo "5.6 Adjust permissions and ownership"
 chgrp openldap /etc/ssl/private/${LDAP_NAME}_slapd_key.pem
 chmod 0640 /etc/ssl/private/${LDAP_NAME}_slapd_key.pem
 gpasswd -a openldap ssl-cert
 loginfo "... done\n"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-loginfo "Restart slapd"
+loginfo "5.7 Restart slapd"
 systemctl restart slapd
 sleep 2
 loginfo "... done\n"
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-loginfo "Adding certificates to LDAP"
+loginfo "6-8 Adding certificates to LDAP"
 cat <<EOF > certinfo.ldif
 dn: cn=config
 add: olcTLSCACertificateFile
@@ -88,7 +88,7 @@ loginfo "... done\n"
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-loginfo "Enabling ldaps://"
+loginfo "5.9 Enabling ldaps://"
 sed -i 's|SLAPD_SERVICES=.*|SLAPD_SERVICES="ldap:/// ldapi:/// ldaps:///"|' /etc/default/slapd
 sed -i 's|TLS_CACERT.*|TLS_CACERT /etc/ssl/certs/cacert.pem|' /etc/ldap/ldap.conf
 systemctl restart slapd
