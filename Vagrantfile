@@ -24,7 +24,7 @@ Vagrant.configure("2") do |config|
   name     = ["authx"             , "c73"              , "u1604"                ]
   memory   = [1024                , 1024               , 1024                   ]
   cpus     = [1                   , 1                  , 1                      ]
-  tag      = ["server"            , "client-centos73"  , "client-ubuntu1604"    ]
+  tag      = ["server"            , "client"           , "client"               ]
   image    = ["bento/ubuntu-16.04", "bento/centos-7.3" , "bento/ubuntu-16.04"   ]
 
 
@@ -59,8 +59,10 @@ Vagrant.configure("2") do |config|
         chmod 600 /home/vagrant/.ssh/id_rsa*
         chown vagrant:vagrant /home/vagrant/.ssh/id_rsa*
         cat /home/vagrant/.ssh/id_rsa.pub >> /home/vagrant/.ssh/authorized_keys
-
-        /vagrant/#{tag[i]}.sh
+        
+        cd /vagrant
+        ./#{tag[i]}.sh
+        cp /etc/ssl/certs/cacert.pem /vagrant
       SHELL
     end
   end

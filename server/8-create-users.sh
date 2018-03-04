@@ -1,5 +1,5 @@
 #!/bin/bash
-DIR=$(dirname $0) && source "$DIR/../config.sh"
+DIR=$(dirname $0) && source "$DIR/../config.sh" && source "$DIR/../lib.sh"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 loginfo "8.1 Creating group"

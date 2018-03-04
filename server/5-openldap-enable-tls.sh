@@ -1,5 +1,5 @@
 #!/bin/bash
-DIR=$(dirname $0) && source "$DIR/../config.sh"
+DIR=$(dirname $0) && source "$DIR/../config.sh" && source "$DIR/../lib.sh"
 
 # Source: https://help.ubuntu.com/lts/serverguide/openldap-server.html#openldap-tls
 
@@ -71,7 +71,7 @@ loginfo "... done\n"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 loginfo "6-8 Adding certificates to LDAP"
-cat <<EOF > certinfo.ldif
+cat <<EOF > /root/certinfo.ldif
 dn: cn=config
 add: olcTLSCACertificateFile
 olcTLSCACertificateFile: /etc/ssl/certs/cacert.pem
@@ -83,7 +83,8 @@ add: olcTLSCertificateKeyFile
 olcTLSCertificateKeyFile: /etc/ssl/private/${LDAP_NAME}_slapd_key.pem
 EOF
 
-ldapmodify -Y EXTERNAL -H ldapi:/// -f certinfo.ldif
+ldapmodify -Y EXTERNAL -H ldapi:/// -f /root/certinfo.ldif
+rm -f /root/certinfo.ldif
 loginfo "... done\n"
 
 
