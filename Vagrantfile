@@ -62,7 +62,9 @@ Vagrant.configure("2") do |config|
         
         cd /vagrant
         ./#{tag[i]}.sh
-        cp /etc/ssl/certs/cacert.pem /vagrant
+        if [ $(hostname) == "authx" ]; then
+          cp /etc/ssl/certs/cacert.pem /vagrant
+        fi
       SHELL
     end
   end

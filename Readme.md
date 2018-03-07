@@ -1,6 +1,8 @@
 # SSSD Configuration including Kerberos
 
-## Create Authentication Server
+## Using Vagrant
+
+### Create Authentication Server
 
 Edit `config.sh` and adapt at least `DOMAIN` , `IP_PREFIX` , `SERVER_SUFFIX` , `LDAP_ORG` , `USE_KRB5`.
 
@@ -8,13 +10,41 @@ Edit `config.sh` and adapt at least `DOMAIN` , `IP_PREFIX` , `SERVER_SUFFIX` , `
 vagrant up authx
 ```
 
-## Create centos 7.3 client
+### Create Centos 7.3 client
 
-Copy `config.sh` and `/etc/ssl/certs/cacert.pem` from server (`authx`) to the installer directory on the client,
+Copy `config.sh` and `/etc/ssl/certs/cacert.pem` from server (`authx`) to the installer directory on the client.
 
 ```bash
 vagrant up c73
 ```
+
+### Create Ubuntu 16.04 client
+
+Copy `config.sh` and `/etc/ssl/certs/cacert.pem` from server (`authx`) to the installer directory on the client.
+
+```bash
+vagrant up u1604
+```
+
+## On existing machines
+
+### Create Authentication Server
+
+Clone the project to the Ubuntu 16.04 (!) machine and edit `config.sh` and adapt at least `DOMAIN` , `IP_PREFIX` , `SERVER_SUFFIX` , `LDAP_ORG` , `USE_KRB5`.
+
+```bash
+sudo server.sh
+```
+
+### Create Ubuntu 16.04 or Centos 7.3 client
+
+Clone the project to the Ubuntu 16.04 or Centos 7.3 machine and copy `config.sh` and `/etc/ssl/certs/cacert.pem` from server (`authx`) to the installer directory on the client.
+
+```bash
+sudo client.sh
+```
+
+
 
 ## Test LDAP
 Check Authentication against LDAP only
@@ -40,7 +70,16 @@ uid=10001(alice) gid=10001(alice) Gruppen=10001(alice),10040(all users),10060(ac
 
 
 (vagrant)> su -l bob
+Password:
+Creating directory '/home/bob'.
 
+(bob)> id
+uid=10002(bob) gid=10002(bob) groups=10002(bob),10020(staff),10040(all users),10060(acme_users)
+```
+
+If Kerberos is configured (`USE_KRB5=1` in `config.sh`) a ticket should be created:
+
+```bash
 (bob)> klist
 Ticket cache: FILE:/tmp/krb5cc_10003_aYp5PL
 Default principal: mallory@ACME.LOCALDOMAIN
@@ -48,9 +87,6 @@ Default principal: mallory@ACME.LOCALDOMAIN
 Valid starting       Expires              Service principal
 01/27/2018 12:45:00  01/27/2018 22:45:00  krbtgt/ACME.LOCALDOMAIN@ACME.LOCALDOMAIN
     renew until 01/28/2018 12:45:00
-
-
-(bob)> ls -l /home
 ```
 
 

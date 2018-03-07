@@ -12,9 +12,13 @@ loginfo "... done\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 loginfo "2.2 Setting entropy"
 
-sed -i "s|ExecStart=/sbin/rngd.*|ExecStart=/sbin/rngd -f -r /dev/urandom|" /usr/lib/systemd/system/rngd.service
-systemctl daemon-reload
-systemctl start rngd
+if is_centos7; then
+    sed -i "s|ExecStart=/sbin/rngd.*|ExecStart=/sbin/rngd -f -r /dev/urandom|" /usr/lib/systemd/system/rngd.service
+    systemctl daemon-reload
+    systemctl start rngd
+else
+    /etc/init.d/rng-tools start
+fi
 
 loginfo "Validation"
 loginfo "entropy: $(cat /proc/sys/kernel/random/entropy_avail)"
@@ -25,9 +29,11 @@ loginfo "... done\n"
 loginfo "2.3 Setting time and ntpd"
 timedatectl set-timezone Europe/Berlin
 
-ntpdate -b pool.ntp.org
-systemctl enable ntpd
-systemctl start ntpd
+if is_centos7; then
+    ntpdate -b pool.ntp.org
+    systemctl enable $NTPD
+    systemctl start $NTPD
+fi
 
 loginfo "Validation"
 loginfo "date: $(date)"

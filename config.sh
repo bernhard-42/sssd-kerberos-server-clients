@@ -1,11 +1,12 @@
 #  ------------ Align with Vagrantfile ------------ 
-export DOMAIN=poc.acme.localdomain   # CAUTION: Edit it, but don't rename or remove it (it is parsed in Vagrantfile) !
+export DOMAIN=poc.acme.local         # CAUTION: Edit it, but don't rename or remove it (it is parsed in Vagrantfile) !
 export IP_PREFIX=192.168.56          # CAUTION: Edit it, but don't rename or remove it (it is parsed in Vagrantfile) !
 export SERVER_SUFFIX=10              # CAUTION: Edit it, but don't rename or remove it (it is parsed in Vagrantfile) !
 
 # ------------ Common settings ------------
 export REPO_PATH=$(pwd)
 export USE_KRB5=0                    # Edit KRB5 section below, if set to 1
+export PHPLDAPADMIN=1
 
 # ------------ LDAP ------------
 export LDAP_ORG="Acme AG"
@@ -45,4 +46,7 @@ if [ $USE_KRB5 -eq 1 ]; then
     export KDC_MASTER_KEY="mastersecret"
 fi
 
-
+# ------------ KRB5 ------------
+if [ $PHPLDAPADMIN -eq 1 ]; then
+    export PHPLDAPADMIN_PORT=8389
+fi

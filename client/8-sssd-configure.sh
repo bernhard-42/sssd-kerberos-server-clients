@@ -62,7 +62,13 @@ else
     ENABLE_KRB5=""
 fi
 
-authconfig --enablesssd --enablesssdauth --enablemkhomedir ${ENABLE_KRB5} --update
+if is_centos7; then
+    authconfig --enablesssd --enablesssdauth --enablemkhomedir ${ENABLE_KRB5} --update
+else
+    # Mean hack to overcome a bug in pam-auth-update
+    echo -e "\nsession	optional			pam_mkhomedir.so" >> /etc/pam.d/common-session
+    echo "/etc/pam.d/common-session edited manually -> take into account when calling pam-auth-update"
+fi
 loginfo "done\n"
 
 
