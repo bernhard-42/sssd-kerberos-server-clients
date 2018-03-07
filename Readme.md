@@ -1,8 +1,8 @@
 # SSSD Configuration including Kerberos
 
-## Using Vagrant
+## 1 Using Vagrant
 
-### Create Authentication Server
+### 1.1 Create Authentication Server
 
 Edit `config.sh` and adapt at least `DOMAIN` , `IP_PREFIX` , `SERVER_SUFFIX` , `LDAP_ORG` , `USE_KRB5`.
 
@@ -10,7 +10,7 @@ Edit `config.sh` and adapt at least `DOMAIN` , `IP_PREFIX` , `SERVER_SUFFIX` , `
 vagrant up authx
 ```
 
-### Create Centos 7.3 client
+### 1.2 Create Centos 7.3 client
 
 Copy `config.sh` and `/etc/ssl/certs/cacert.pem` from server (`authx`) to the installer directory on the client.
 
@@ -18,7 +18,7 @@ Copy `config.sh` and `/etc/ssl/certs/cacert.pem` from server (`authx`) to the in
 vagrant up c73
 ```
 
-### Create Ubuntu 16.04 client
+### 1.3 Create Ubuntu 16.04 client
 
 Copy `config.sh` and `/etc/ssl/certs/cacert.pem` from server (`authx`) to the installer directory on the client.
 
@@ -26,9 +26,9 @@ Copy `config.sh` and `/etc/ssl/certs/cacert.pem` from server (`authx`) to the in
 vagrant up u1604
 ```
 
-## On existing machines
+## 2 On existing machines
 
-### Create Authentication Server
+### 2.1 Create Authentication Server
 
 Clone the project to the Ubuntu 16.04 (!) machine and edit `config.sh` and adapt at least `DOMAIN` , `IP_PREFIX` , `SERVER_SUFFIX` , `LDAP_ORG` , `USE_KRB5`.
 
@@ -36,7 +36,7 @@ Clone the project to the Ubuntu 16.04 (!) machine and edit `config.sh` and adapt
 sudo server.sh
 ```
 
-### Create Ubuntu 16.04 or Centos 7.3 client
+### 2.2 Create Ubuntu 16.04 or Centos 7.3 client
 
 Clone the project to the Ubuntu 16.04 or Centos 7.3 machine and copy `config.sh` and `/etc/ssl/certs/cacert.pem` from server (`authx`) to the installer directory on the client.
 
@@ -46,7 +46,10 @@ sudo client.sh
 
 
 
-## Test LDAP
+## 3 Test 
+
+## 3.1 Test LDAP
+
 Check Authentication against LDAP only
 
 ```bash
@@ -54,7 +57,7 @@ ldapwhoami -x -H ldap://authx.$DOMAIN -D "uid=alice,ou=People,$BASE" -w $PASSWOR
 ```
 
 
-## Test SSSD
+### 3.2 Test SSSD
 
 Log into Centos 7.3 machine (c73)
 
@@ -89,7 +92,7 @@ Valid starting       Expires              Service principal
     renew until 01/28/2018 12:45:00
 ```
 
-## LDAP Admin UI
+## 4 LDAP Admin UI
 
 If `PHPLDAPADMIN`is `1`then phpldapadmin is configured at the port provided in `config.sh`.
 
