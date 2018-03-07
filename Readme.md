@@ -89,6 +89,12 @@ Valid starting       Expires              Service principal
     renew until 01/28/2018 12:45:00
 ```
 
+## LDAP Admin UI
+
+If `PHPLDAPADMIN`is `1`then phpldapadmin is configured at the port provided in `config.sh`.
+
+Call e.g. http://192.168.56.10:8389/phpldapadmin/
+
 
 # License
 
