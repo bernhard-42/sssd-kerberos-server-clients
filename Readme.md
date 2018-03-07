@@ -48,7 +48,7 @@ sudo client.sh
 
 ## 3 Test 
 
-## 3.1 Test LDAP
+### 3.1 Test LDAP
 
 Check Authentication against LDAP only
 
