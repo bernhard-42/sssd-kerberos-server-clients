@@ -44,11 +44,48 @@ Clone the project to the Ubuntu 16.04 or Centos 7.3 machine and copy `config.sh`
 sudo client.sh
 ```
 
+## 3 Using docker
 
+### 3.1 Create docker image
 
-## 3 Test 
+Clone the project to the Ubuntu 16.04 (!) machine and edit `config.sh` and adapt at least `DOMAIN` , `IP_PREFIX` , `SERVER_SUFFIX` , `LDAP_ORG` , `USE_KRB5`.
 
-### 3.1 Test LDAP
+```bash
+IMAGE_VERSION=1.0.1
+./docker-build.sh $IMAGE_VERSION
+```
+
+Results in ./target:
+
+```bash
+cacert.pem
+client-installer.tgz
+config.sh
+ldap-kdc-poc.acme.local-1.0.1.docker
+lib.sh
+run.sh
+```
+
+### 3.2 Server
+
+Copy all files in target to the machine where the LDAP-KDC container should run and call
+
+```bash
+./run.sh
+```
+
+### 3.3 Clients
+
+Copy all files in target to the machine that is a client of the LDAP-KDC and call
+
+```bash
+tar -zxf client-installer.tgz
+./client.sh
+```
+
+## 4 Test
+
+### 4.1 Test LDAP
 
 Check Authentication against LDAP only
 
@@ -56,8 +93,7 @@ Check Authentication against LDAP only
 ldapwhoami -x -H ldap://authx.$DOMAIN -D "uid=alice,ou=People,$BASE" -w $PASSWORD
 ```
 
-
-### 3.2 Test SSSD
+### 4.2 Test SSSD
 
 Log into Centos 7.3 machine (c73)
 
@@ -94,12 +130,11 @@ Valid starting       Expires              Service principal
 
 ## 4 LDAP Admin UI
 
-If `PHPLDAPADMIN`is `1`then phpldapadmin is configured at the port provided in `config.sh`.
+If `PHPLDAPADMIN` is `1` then `phpldapadmin` is configured at the port provided in `config.sh`.
 
-Call e.g. http://192.168.56.10:8389/phpldapadmin/
+Call e.g. <http://192.168.56.10:8389/phpldapadmin/>
 
-
-# License
+## License
 
 Copyright 2018 Bernhard Walter
 
@@ -107,7 +142,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+   <http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

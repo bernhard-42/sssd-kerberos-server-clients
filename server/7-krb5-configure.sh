@@ -82,8 +82,8 @@ cat > /etc/krb5.conf << EOF
 
 [realms]
     ${REALM} = {
-        kdc = $(hostname -f)
-        admin_server = $(hostname -f)
+        kdc = ${KDC_IP}
+        admin_server = ${KDC_IP}
         database_module = openldap_ldapconf
     }
 
@@ -108,7 +108,8 @@ cat > /etc/krb5.conf << EOF
         # this object needs to have read and write rights on
         # the realm container, principal container and realm sub-trees
         ldap_service_password_file = /etc/krb5kdc/service.keyfile
-        ldap_servers = ldap://$(hostname -f)
+        # ldap_servers = ldap://${LDAP_IP}
+        ldap_servers = ldap://localhost
         ldap_conns_per_server = 5
     }
 EOF
@@ -119,7 +120,7 @@ loginfo "done\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 loginfo "7.3 Creating REALM"
 
-kdb5_ldap_util -D ${LDAP_ADMIN} create -subtrees ${BASE} -r ${REALM} -s -H ldap://$(hostname -f) << EOF
+kdb5_ldap_util -D ${LDAP_ADMIN} create -subtrees ${BASE} -r ${REALM} -s -H ldap:/// << EOF
 ${LDAP_PASSWORD}
 ${KDC_MASTER_KEY}
 ${KDC_MASTER_KEY}
@@ -141,9 +142,13 @@ loginfo "done\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 loginfo "7.5 Restarting KDC"
 
-systemctl start krb5-kdc
-systemctl start krb5-admin-server
-
+if [[ $DOCKER -eq 1 ]]; then
+    service krb5-kdc start
+    service krb5-admin-server start
+else
+    systemctl start krb5-kdc
+    systemctl start krb5-admin-server
+fi
 loginfo "done\n"
 
 

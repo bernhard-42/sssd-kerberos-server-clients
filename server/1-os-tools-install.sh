@@ -12,5 +12,9 @@ loginfo "... done\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 loginfo "1.2 Installing OS tools"
 
-apt-get install -y ntp ntpdate rng-tools gnutls-bin ssl-cert
+if [[ $DOCKER -eq 1 ]]; then
+    apt-get install -y net-tools gnutls-bin ssl-cert
+else
+    apt-get install -y ntp rng-tools gnutls-bin ssl-cert
+fi
 loginfo "... done\n"

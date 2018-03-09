@@ -64,7 +64,13 @@ loginfo "... done\n"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 loginfo "5.7 Restart slapd"
-systemctl restart slapd
+if [[ $DOCKER -eq 1 ]]; then
+    service slapd stop
+    killall slapd         # sometimes doesn't stop
+    service slapd start
+else
+    systemctl restart slapd
+fi
 sleep 2
 loginfo "... done\n"
 
@@ -92,5 +98,11 @@ loginfo "... done\n"
 loginfo "5.9 Enabling ldaps://"
 sed -i 's|SLAPD_SERVICES=.*|SLAPD_SERVICES="ldap:/// ldapi:/// ldaps:///"|' /etc/default/slapd
 sed -i 's|TLS_CACERT.*|TLS_CACERT /etc/ssl/certs/cacert.pem|' /etc/ldap/ldap.conf
-systemctl restart slapd
+if [[ $DOCKER -eq 1 ]]; then
+    service slapd stop
+    killall slapd         # sometimes doesn't stop
+    service slapd start
+else
+    systemctl restart slapd
+fi
 loginfo "... done\n"

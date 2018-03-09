@@ -33,7 +33,11 @@ if [ ${PHPLDAPADMIN} -eq 1 ]; then
     sed -i "s|^\$config->custom->appearance['hide_template_warning'] = .*|\$config->custom->appearance['hide_template_warning'] = true;|" /etc/phpldapadmin/config.php
 
     sed -i "s|^Listen.*|Listen ${PHPLDAPADMIN_PORT}|" /etc/apache2/ports.conf
-    systemctl restart apache2
+    if [[ $DOCKER -eq 1 ]]; then
+        apachectl restart
+    else
+        systemctl restart apache2
+    fi
 
     loginfo "LDP Admin Tool: http://$(hostname -i):${PHPLDAPADMIN_PORT}/phpldapadmin/"
 else

@@ -1,17 +1,19 @@
 #  ------------ Align with Vagrantfile ------------ 
 export DOMAIN=poc.acme.local         # CAUTION: Edit it, but don't rename or remove it (it is parsed in Vagrantfile) !
-export IP_PREFIX=192.168.56          # CAUTION: Edit it, but don't rename or remove it (it is parsed in Vagrantfile) !
-export SERVER_SUFFIX=10              # CAUTION: Edit it, but don't rename or remove it (it is parsed in Vagrantfile) !
+export SERVER_IP=192.168.56.11       # CAUTION: Edit it, but don't rename or remove it (it is parsed in Vagrantfile) !
+
+export SERVER_NAME=authx
 
 # ------------ Common settings ------------
+export TZ=Europe/Berlin
 export REPO_PATH=$(pwd)
-export USE_KRB5=0                    # Edit KRB5 section below, if set to 1
-export PHPLDAPADMIN=1
+export USE_KRB5=1                    # Edit KRB5 section below, if set to 1
+export PHPLDAPADMIN=1                # Edit PHPLADPADMIN section below, if set to 1
 
 # ------------ LDAP ------------
 export LDAP_ORG="Acme AG"
-export LDAP_NAME="authx.${DOMAIN}"
-export LDAP_IP=${IP_PREFIX}.${SERVER_SUFFIX}
+export LDAP_NAME="${SERVER_NAME}.${DOMAIN}"
+export LDAP_IP=${SERVER_IP}
 IFS='.' read -r -a PARTS <<< "$DOMAIN"
 export BASE=$(printf ",dc=%s" "${PARTS[@]}"  | cut -c2-)
 export LDAP_ADMIN="cn=admin,${BASE}"
@@ -38,15 +40,15 @@ export USERS
 
 # ------------ KRB5 ------------
 if [ $USE_KRB5 -eq 1 ]; then
-    export KDC_NAME="authx.${DOMAIN}"
-    export KDC_IP=${IP_PREFIX}.${SERVER_SUFFIX}
+    export KDC_NAME="${SERVER_NAME}.${DOMAIN}"
+    export KDC_IP=${SERVER_IP}
     export REALM=$(echo "$DOMAIN" | tr '[:lower:]' '[:upper:]')
     export KDC_ADMIN="admin"
     export KDC_PASSWORD="krb5secret"
     export KDC_MASTER_KEY="mastersecret"
 fi
 
-# ------------ KRB5 ------------
+# ------------ PHPLADPADMIN ------------
 if [ $PHPLDAPADMIN -eq 1 ]; then
     export PHPLDAPADMIN_PORT=8389
 fi

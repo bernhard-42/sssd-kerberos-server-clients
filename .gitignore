@@ -4,3 +4,5 @@ id_rsa
 id_rsa.pub
 cacert.pem
 work
+installer.tar.gz
+target

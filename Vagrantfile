@@ -10,10 +10,10 @@ Vagrant.configure("2") do |config|
         kv = parts[1].split("=")
         if kv[0] == "DOMAIN"
           domain = kv[1]
-        elsif kv[0] == "IP_PREFIX"
-          ipprefix = kv[1]
-        elsif kv[0] == "SERVER_SUFFIX"
-          serversuffix = Integer(kv[1])
+        elsif kv[0] == "SERVER_IP"
+          parts = kv[1].split(".")
+          ipprefix = parts[0..2].join(".")
+          serversuffix = Integer(parts[3])
         end
       end
     end
@@ -61,7 +61,7 @@ Vagrant.configure("2") do |config|
         cat /home/vagrant/.ssh/id_rsa.pub >> /home/vagrant/.ssh/authorized_keys
         
         cd /vagrant
-        ./#{tag[i]}.sh
+       ./#{tag[i]}.sh
         if [ $(hostname) == "authx" ]; then
           cp /etc/ssl/certs/cacert.pem /vagrant
         fi

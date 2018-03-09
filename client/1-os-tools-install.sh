@@ -18,6 +18,6 @@ if is_centos7; then
     yum install -y ntp ntpdate rng-tools
 else
     export DEBIAN_FRONTEND=noninteractive
-    apt-get install -y ntp ntpdate rng-tools
+    apt-get install -y ntp rng-tools
 fi
 loginfo "... done\n"
