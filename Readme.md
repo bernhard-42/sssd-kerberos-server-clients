@@ -132,7 +132,7 @@ Valid starting       Expires              Service principal
 
 If `PHPLDAPADMIN` is `1` then `phpldapadmin` is configured at the port provided in `config.sh`.
 
-Call e.g. <http://192.168.56.10:8389/phpldapadmin/>
+Call e.g. <http://$SERVER_IP:8389/phpldapadmin/>
 
 ## License
 
