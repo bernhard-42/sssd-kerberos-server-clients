@@ -39,12 +39,15 @@ EOF
 if [ ${USE_KRB5} -eq 1 ]; then
     cat << EOF >> /etc/sssd/sssd.conf
 auth_provider = krb5
+chpass_provider = krb5
+krb5_changepw_principle = kadmin/changepw
 krb5_server = ${KDC_IP}
 krb5_realm = ${REALM}
 EOF
 else
     cat << EOF >> /etc/sssd/sssd.conf
 auth_provider = ldap
+chpass_provider = ldap
 EOF
 fi
 
