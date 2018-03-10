@@ -29,9 +29,7 @@ EOF
 cat /root/debconf-slapd.conf | debconf-set-selections
 apt-get install -y ldap-utils slapd
 rm /root/debconf-slapd.conf
-if [[ $DOCKER -eq 1 ]]; then
-    service slapd start
-fi
+start_service slapd -d
 
 loginfo "3.2 Validation"
 loginfo "LDAP admin in $(ldapsearch -x -LLL -H ldap:/// -b ${BASE} dn)"
@@ -42,8 +40,6 @@ loginfo "3.3 Installing PHPLdapAdmin"
 
 if [ ${PHPLDAPADMIN} -eq 1 ]; then
     apt-get install -y phpldapadmin
-    if [[ $DOCKER -eq 1 ]]; then
-        apachectl start
-    fi
+    start_service apache2 -d
 fi
 loginfo "... done\n"

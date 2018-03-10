@@ -142,13 +142,8 @@ loginfo "done\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 loginfo "7.5 Restarting KDC"
 
-if [[ $DOCKER -eq 1 ]]; then
-    service krb5-kdc start
-    service krb5-admin-server start
-else
-    systemctl start krb5-kdc
-    systemctl start krb5-admin-server
-fi
+start_service  krb5-kdc
+start_service  krb5-admin-server
 loginfo "done\n"
 
 
@@ -158,3 +153,4 @@ loginfo "7.6 Creating KDC admin user"
 kadmin.local -q "addprinc -clearpolicy -pw ${KDC_PASSWORD} ${KDC_ADMIN}/admin@${REALM}"
 echo "*/admin@${REALM}    *" > /etc/krb5kdc/kadm5.acl
 chmod 644 /etc/krb5kdc/kadm5.acl
+loginfo "done\n"

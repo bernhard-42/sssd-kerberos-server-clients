@@ -18,12 +18,7 @@ loginfo "... done\n"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 loginfo "2.3 Setting timezone"
-if [[ $DOCKER -eq 1 ]]; then
-    ln -snf /usr/share/zoneinfo/$TZ /etc/localtime
-    echo $TZ > /etc/timezone
-else
-    timedatectl set-timezone $TZ
-fi
+set_tz $TZ
 
 loginfo "2.4 Validation"
 loginfo "date: $(date)"

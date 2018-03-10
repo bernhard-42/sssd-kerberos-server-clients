@@ -1,6 +1,6 @@
 #  ------------ Align with Vagrantfile ------------ 
 export DOMAIN=poc.acme.local         # CAUTION: Edit it, but don't rename or remove it (it is parsed in Vagrantfile) !
-export SERVER_IP=192.168.56.11       # CAUTION: Edit it, but don't rename or remove it (it is parsed in Vagrantfile) !
+export SERVER_IP=192.168.56.10       # CAUTION: Edit it, but don't rename or remove it (it is parsed in Vagrantfile) !
 
 export SERVER_NAME=authx
 
@@ -21,7 +21,6 @@ export LDAP_PASSWORD="ldapsecret"
 
 export LDAP_CERT_EXPIRY=3650
 export LDAP_CERT_CN="Bernhard Walter"
-export LDAP_CERT_BITS=1024
 
 # ------------ Users and groups ------------
 DEFAULT_ADMIN_GROUP="admins"

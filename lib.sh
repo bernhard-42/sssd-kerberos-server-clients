@@ -36,3 +36,44 @@ function is_centos7 {
         return 1
     fi    
 }
+
+function set_tz {
+    TZ=$1
+    if [[ $DOCKER -eq 1 ]]; then
+        ln -snf /usr/share/zoneinfo/$TZ /etc/localtime
+        echo $TZ > /etc/timezone
+    else
+        timedatectl set-timezone $TZ
+    fi
+}
+
+function start_service {
+    SERVICE=$1
+    if [[ $DOCKER -eq 1 ]]; then
+        if [ $SERVICE == apache2 ]; then
+            apachectl start
+        else
+            service $SERVICE start
+        fi
+    else
+        if [ -z "$2" ]; then
+            systemctl start ${SERVICE}
+        fi
+    fi
+}
+
+function restart_service {
+    SERVICE=$1
+    if [[ $DOCKER -eq 1 ]]; then
+        if [ $SERVICE == apache2 ]; then
+            apachectl restart
+        else
+            service $SERVICE stop
+            kill slapd
+            service $SERVICE start
+        fi
+    else
+        systemctl restart ${SERVICE}
+    fi
+}
+
