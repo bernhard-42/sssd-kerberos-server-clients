@@ -6,8 +6,6 @@ if [ "x$6" == "x" ]; then
     exit 1
 fi
 
-loginfo "Creating user's group in LDAP"
-
 UID_NUMBER=$1
 U_ID=$2
 FNAME=$3
@@ -18,14 +16,15 @@ GROUP_NAMES=$6
 GROUP_ID=$UID_NUMBER
 GROUP_NAME=$U_ID
 
-$DIR/create-group.sh "${GROUP_ID}" "${GROUP_NAME}"
 
-loginfo "done"
+$DIR/create-group.sh "${GROUP_ID}" "${GROUP_NAME}"
 
 
 loginfo "Creating user in LDAP (id=${UID_NUMBER} uid=${U_ID} fname=${FNAME} sname=${SNAME} gid=${GROUP_ID} pw=${PASSWORD})":
 
-cat << EOF >> /root/user.ldif
+SHA_PASSWORD=$(slappasswd -s ${PASSWORD})
+
+cat << EOF > ./user.ldif
 dn: uid=${U_ID},ou=People,${BASE}
 objectClass: inetOrgPerson
 objectClass: posixAccount
@@ -37,16 +36,14 @@ cn: ${FNAME} ${SNAME}
 displayName: ${SNAME}, ${FNAME}
 uidNumber: ${UID_NUMBER}
 gidNumber: ${UID_NUMBER}
-userPassword: ${PASSWORD}
+userPassword: ${SHA_PASSWORD}
 gecos: ${FNAME} ${SNAME}
 loginShell: /bin/bash
 homeDirectory: /home/${U_ID}
 EOF
 
-ldapadd -x -D ${LDAP_ADMIN} -w ${LDAP_PASSWORD} -f /root/user.ldif
-
-rm -f /root/user.ldif
-
+ldapadd -x -D ${LDAP_ADMIN} -w ${LDAP_PASSWORD} -f ./user.ldif
+rm -f ./user.ldif
 loginfo "done"
 
 
@@ -55,16 +52,15 @@ loginfo "Adding group memberships"
 IFS=',' read -r -a ALL_GROUP_NAMES <<< "$GROUP_NAMES"
 
 for GROUP_NAME in "${ALL_GROUP_NAMES[@]}"; do
-    cat << EOF >> /root/group.ldif 
+    cat << EOF > ./group.ldif 
 dn: cn=${GROUP_NAME/\%20/ },ou=Groups,${BASE}
 changetype: modify
 add: memberuid
 memberuid: ${U_ID}
 EOF
-    cat /root/group.ldif
-    ldapmodify -x -D ${LDAP_ADMIN} -w ${LDAP_PASSWORD} -f /root/group.ldif
-
-    rm -f /root/group.ldif
+    cat ./group.ldif
+    ldapmodify -x -D ${LDAP_ADMIN} -w ${LDAP_PASSWORD} -f ./group.ldif
+    rm -f ./group.ldif
 done
 
 loginfo "done"

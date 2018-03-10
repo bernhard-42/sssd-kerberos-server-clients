@@ -11,15 +11,15 @@ GROUP_NAME=${2/\%20/ }
 
 loginfo "Creating group (gid=${GROUP_ID} name='${GROUP_NAME}'):"
 
-cat > /root/group.ldif << EOF
+cat  << EOF > ./group.ldif
 dn: cn=${GROUP_NAME},ou=Groups,${BASE}
 objectClass: posixGroup
 cn: ${GROUP_NAME}
 gidNumber: ${GROUP_ID}
 EOF
 
-ldapadd -x -D ${LDAP_ADMIN} -w ${LDAP_PASSWORD} -f /root/group.ldif
+ldapadd -x -D ${LDAP_ADMIN} -w ${LDAP_PASSWORD} -f ./group.ldif
 
-rm -f /root/group.ldif
+rm -f ./group.ldif
 
 loginfo "done\n"

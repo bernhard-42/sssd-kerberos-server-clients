@@ -30,7 +30,7 @@ vagrant up u1604
 
 ### 2.1 Create Authentication Server
 
-Clone the project to the Ubuntu 16.04 (!) machine and edit `config.sh` and adapt at least `DOMAIN` , `IP_PREFIX` , `SERVER_SUFFIX` , `LDAP_ORG` , `USE_KRB5`.
+Clone the project to an Ubuntu 16.04 (!) machine and edit `config.sh` to at least adapt `DOMAIN` , `IP_PREFIX` , `SERVER_SUFFIX` , `LDAP_ORG` , `USE_KRB5`.
 
 ```bash
 sudo server.sh
@@ -48,7 +48,7 @@ sudo client.sh
 
 ### 3.1 Create docker image
 
-Clone the project to the Ubuntu 16.04 (!) machine and edit `config.sh` and adapt at least `DOMAIN` , `IP_PREFIX` , `SERVER_SUFFIX` , `LDAP_ORG` , `USE_KRB5`.
+Clone the project to machine running docker and edit `config.sh` to at least adapt  `DOMAIN` , `IP_PREFIX` , `SERVER_SUFFIX` , `LDAP_ORG` , `USE_KRB5`.
 
 ```bash
 IMAGE_VERSION=1.0.1

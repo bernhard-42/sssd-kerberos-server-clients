@@ -7,7 +7,7 @@ export SERVER_NAME=authx
 # ------------ Common settings ------------
 export TZ=Europe/Berlin
 export REPO_PATH=$(pwd)
-export USE_KRB5=1                    # Edit KRB5 section below, if set to 1
+export USE_KRB5=0                    # Edit KRB5 section below, if set to 1
 export PHPLDAPADMIN=1                # Edit PHPLADPADMIN section below, if set to 1
 
 # ------------ LDAP ------------
