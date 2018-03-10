@@ -31,8 +31,8 @@ timedatectl set-timezone Europe/Berlin
 
 if is_centos7; then
     ntpdate -b pool.ntp.org
-    systemctl enable $NTPD
-    systemctl start $NTPD
+    systemctl enable ntpd
+    systemctl start ntpd
 fi
 
 loginfo "Validation"
