@@ -25,7 +25,7 @@ loginfo "Creating user in LDAP (id=${UID_NUMBER} uid=${U_ID} fname=${FNAME} snam
 SHA_PASSWORD=$(slappasswd -s ${PASSWORD})
 
 cat << EOF > ./user.ldif
-dn: uid=${U_ID},ou=People,${BASE}
+dn: uid=${U_ID},ou=People,${LDAP_BASE}
 objectClass: inetOrgPerson
 objectClass: posixAccount
 objectClass: shadowAccount
@@ -53,7 +53,7 @@ IFS=',' read -r -a ALL_GROUP_NAMES <<< "$GROUP_NAMES"
 
 for GROUP_NAME in "${ALL_GROUP_NAMES[@]}"; do
     cat << EOF > ./group.ldif 
-dn: cn=${GROUP_NAME/\%20/ },ou=Groups,${BASE}
+dn: cn=${GROUP_NAME/\%20/ },ou=Groups,${LDAP_BASE}
 changetype: modify
 add: memberuid
 memberuid: ${U_ID}
@@ -68,7 +68,7 @@ loginfo "done"
 if [ ${USE_KRB5} -eq 1 ]; then
     loginfo "Adding user to KDC"
 
-    kadmin.local -q "addprinc -clearpolicy -x dn=\"uid=${U_ID},ou=People,${BASE}\" -pw ${PASSWORD} ${U_ID}"
+    kadmin.local -q "addprinc -clearpolicy -x dn=\"uid=${U_ID},ou=People,${LDAP_BASE}\" -pw ${PASSWORD} ${U_ID}"
 
     loginfo "done"
 fi

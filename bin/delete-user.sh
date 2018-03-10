@@ -27,7 +27,7 @@ loginfo "done"
 loginfo "Deleting user in LDAP (uid=${U_ID} gid=${GROUP_ID})":
 
 cat << EOF > ./user.ldif
-dn: uid=${U_ID},ou=People,${BASE}
+dn: uid=${U_ID},ou=People,${LDAP_BASE}
 changetype: delete
 EOF
     cat ./user.ldif
@@ -41,7 +41,7 @@ loginfo "done"
 
 loginfo "Deleting group memberships"
 
-ldapsearch -LLL -x -D ${LDAP_ADMIN} -w ${LDAP_PASSWORD} -b ${BASE} "(memberUid=${U_ID})" dn | grep -Ev "^\s*$" \
+ldapsearch -LLL -x -D ${LDAP_ADMIN} -w ${LDAP_PASSWORD} -b ${LDAP_BASE} "(memberUid=${U_ID})" dn | grep -Ev "^\s*$" \
 | while read DN; do
     loginfo "Deleting from ${DN}:"
     cat << EOF > ./user.ldif

@@ -16,7 +16,7 @@ if [ "x$PASSWORD" == "x$PASSWORD2" ]; then
     loginfo "Resetting password for '${U_ID}' in LDAP:"
     SHA_PASSWORD=$(slappasswd -s ${PASSWORD})
     cat > ./group.ldif << EOF
-dn: uid=${U_ID},ou=People,${BASE}
+dn: uid=${U_ID},ou=People,${LDAP_BASE}
 changetype: modify
 replace: userPassword
 userPassword: ${SHA_PASSWORD}

@@ -11,7 +11,7 @@ GROUP_NAME=${1/\%20/ }
 loginfo "Deleting group (name='${GROUP_NAME}'):"
 
 cat > ./group.ldif << EOF
-dn: cn=${GROUP_NAME},ou=Groups,${BASE}
+dn: cn=${GROUP_NAME},ou=Groups,${LDAP_BASE}
 changetype: delete
 EOF
 

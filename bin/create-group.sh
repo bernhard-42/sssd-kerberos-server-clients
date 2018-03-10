@@ -12,7 +12,7 @@ GROUP_NAME=${2/\%20/ }
 loginfo "Creating group (gid=${GROUP_ID} name='${GROUP_NAME}'):"
 
 cat  << EOF > ./group.ldif
-dn: cn=${GROUP_NAME},ou=Groups,${BASE}
+dn: cn=${GROUP_NAME},ou=Groups,${LDAP_BASE}
 objectClass: posixGroup
 cn: ${GROUP_NAME}
 gidNumber: ${GROUP_ID}

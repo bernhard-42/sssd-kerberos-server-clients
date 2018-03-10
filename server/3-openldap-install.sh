@@ -32,7 +32,7 @@ rm /root/debconf-slapd.conf
 start_service slapd -d
 
 loginfo "3.2 Validation"
-loginfo "LDAP admin in $(ldapsearch -x -LLL -H ldap:/// -b ${BASE} dn)"
+loginfo "LDAP admin in $(ldapsearch -x -LLL -H ldap:/// -b ${LDAP_BASE} dn)"
 loginfo "... done\n"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -7,7 +7,7 @@ export SERVER_NAME=authx
 # ------------ Common settings ------------
 export TZ=Europe/Berlin
 export REPO_PATH=$(pwd)
-export USE_KRB5=0                    # Edit KRB5 section below, if set to 1
+export USE_KRB5=1                    # Edit KRB5 section below, if set to 1
 export PHPLDAPADMIN=1                # Edit PHPLADPADMIN section below, if set to 1
 
 # ------------ LDAP ------------
@@ -15,8 +15,8 @@ export LDAP_ORG="Acme AG"
 export LDAP_NAME="${SERVER_NAME}.${DOMAIN}"
 export LDAP_IP=${SERVER_IP}
 IFS='.' read -r -a PARTS <<< "$DOMAIN"
-export BASE=$(printf ",dc=%s" "${PARTS[@]}"  | cut -c2-)
-export LDAP_ADMIN="cn=admin,${BASE}"
+export LDAP_BASE=$(printf ",dc=%s" "${PARTS[@]}"  | cut -c2-)
+export LDAP_ADMIN="cn=admin,${LDAP_BASE}"
 export LDAP_PASSWORD="ldapsecret"
 
 export LDAP_CERT_EXPIRY=3650

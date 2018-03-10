@@ -53,13 +53,13 @@ ldapmodify -Q -Y EXTERNAL -H ldapi:/// -f /tmp/modify.ldif
 cat > /tmp/modify.ldif << EOF
 dn: olcDatabase={1}mdb,cn=config
 replace: olcAccess
-olcAccess: to attrs=userPassword,shadowLastChange,krbPrincipalKey by dn="cn=admin,${BASE}" write by anonymous auth by self write by * none
+olcAccess: to attrs=userPassword,shadowLastChange,krbPrincipalKey by dn="cn=admin,${LDAP_BASE}" write by anonymous auth by self write by * none
 -
 add: olcAccess
 olcAccess: to dn.base="" by * read
 -
 add: olcAccess
-olcAccess: to * by dn="cn=admin,${BASE}" write by * read
+olcAccess: to * by dn="cn=admin,${LDAP_BASE}" write by * read
 
 EOF
 
@@ -93,17 +93,17 @@ cat > /etc/krb5.conf << EOF
 
 
 [dbdefaults]
-        ldap_kerberos_container_dn = cn=krbContainer,${BASE}
+        ldap_kerberos_container_dn = cn=krbContainer,${LDAP_BASE}
 
 
 [dbmodules]
     openldap_ldapconf = {
         db_library = kldap
-        ldap_kdc_dn = "cn=admin,${BASE}"
+        ldap_kdc_dn = "cn=admin,${LDAP_BASE}"
 
         # this object needs to have read rights on
         # the realm container, principal container and realm sub-trees
-        ldap_kadmind_dn = "cn=admin,${BASE}"
+        ldap_kadmind_dn = "cn=admin,${LDAP_BASE}"
 
         # this object needs to have read and write rights on
         # the realm container, principal container and realm sub-trees
@@ -120,7 +120,7 @@ loginfo "done\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 loginfo "7.3 Creating REALM"
 
-kdb5_ldap_util -D ${LDAP_ADMIN} create -subtrees ${BASE} -r ${REALM} -s -H ldap:/// << EOF
+kdb5_ldap_util -D ${LDAP_ADMIN} create -subtrees ${LDAP_BASE} -r ${REALM} -s -H ldap:/// << EOF
 ${LDAP_PASSWORD}
 ${KDC_MASTER_KEY}
 ${KDC_MASTER_KEY}
@@ -130,7 +130,7 @@ EOF
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 loginfo "7.4 Creating stash"
 
-kdb5_ldap_util -D ${LDAP_ADMIN} stashsrvpw -f /etc/krb5kdc/service.keyfile cn=admin,${BASE} << EOF
+kdb5_ldap_util -D ${LDAP_ADMIN} stashsrvpw -f /etc/krb5kdc/service.keyfile cn=admin,${LDAP_BASE} << EOF
 ${LDAP_PASSWORD}
 ${LDAP_PASSWORD}
 ${LDAP_PASSWORD}
