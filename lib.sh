@@ -69,7 +69,7 @@ function restart_service {
             apachectl restart
         else
             service $SERVICE stop
-            kill slapd
+            killall slapd
             service $SERVICE start
         fi
     else

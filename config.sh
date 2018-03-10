@@ -1,6 +1,7 @@
 #  ------------ Align with Vagrantfile ------------ 
 export DOMAIN=poc.acme.local         # CAUTION: Edit it, but don't rename or remove it (it is parsed in Vagrantfile) !
 export SERVER_IP=192.168.56.10       # CAUTION: Edit it, but don't rename or remove it (it is parsed in Vagrantfile) !
+export DOCKER=1                      # CAUTION: Edit it, but don't rename or remove it (it is parsed in Vagrantfile) !
 
 export SERVER_NAME=authx
 

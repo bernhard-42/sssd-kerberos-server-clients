@@ -6,6 +6,6 @@ ENV DOCKER=1
 ADD installer.tar.gz /root/
 RUN apt-get update && \
     apt-get -y install tzdata iputils-ping nano && \
-    cd /root && ./server.sh
+    cd /root && ./create-server.sh
 
 CMD /root/server/docker-run.sh

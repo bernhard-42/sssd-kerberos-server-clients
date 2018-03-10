@@ -14,7 +14,7 @@ else
 fi
 IMAGE="${NAME}-${DOMAIN}"
 
-tar -zcf installer.tar.gz bin/ server/ lib.sh config.sh server.sh
+tar -zcf installer.tar.gz bin/ server/ lib.sh config.sh create-server.sh
 docker build -t ${IMAGE}:${VERSION} .
 rm installer.tar.gz
 
@@ -26,13 +26,13 @@ docker cp ldap:/etc/ssl/certs/cacert.pem ./target
 docker rm -f ldap
 
 cp config.sh lib.sh ./target/
-tar -czf ./target/client-installer.tgz client.sh client/
+tar -czf ./target/client-installer.tgz create-client.sh client/
 
 docker save -o ./target/${IMAGE}-${VERSION}.docker ${IMAGE}:${VERSION} 
 
 cat << EOF > ./target/run.sh
 #!/bin/bash
-docker run -d -p 389:389 -p 636:636 -p 88:88 -p 8369:8369 --name ${NAME} --hostname ${SERVER_NAME}.${DOMAIN} ${IMAGE}:${VERSION}
+docker run -d -p 88:88 -p 389:389 -p 464:464 -p 636:636 -p 749:749 -p 8389:8389 --name ${NAME} --hostname ${SERVER_NAME}.${DOMAIN} ${IMAGE}:${VERSION}
 EOF
 chmod a+x ./target/run.sh
 

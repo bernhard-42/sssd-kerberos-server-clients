@@ -1,5 +1,6 @@
 Vagrant.configure("2") do |config|
   domain = ""
+  docker = 0
   ipprefix = ""
   serversuffix = -1
 
@@ -10,6 +11,8 @@ Vagrant.configure("2") do |config|
         kv = parts[1].split("=")
         if kv[0] == "DOMAIN"
           domain = kv[1]
+        elsif kv[0] == "DOCKER"
+          docker = Integer(kv[1])
         elsif kv[0] == "SERVER_IP"
           parts = kv[1].split(".")
           ipprefix = parts[0..2].join(".")
@@ -19,6 +22,9 @@ Vagrant.configure("2") do |config|
     end
   end
   puts "Parsed config: domain=#{domain}, server=#{ipprefix}.#{serversuffix}"
+  if docker == 1
+    puts "Building docker host ..."
+  end
 
   ipsuffix = [serversuffix        , serversuffix + 1   , serversuffix + 2       ]
   name     = ["authx"             , "c73"              , "u1604"                ]
@@ -27,6 +33,9 @@ Vagrant.configure("2") do |config|
   tag      = ["server"            , "client"           , "client"               ]
   image    = ["bento/ubuntu-16.04", "bento/centos-7.3" , "bento/ubuntu-16.04"   ]
 
+  if docker == 1
+    tag[0] = "docker-host"
+  end
 
   hostfile =  "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4\n"
   hostfile += "::1         localhost localhost.localdomain localhost6 localhost6.localdomain6\n"
@@ -61,8 +70,8 @@ Vagrant.configure("2") do |config|
         cat /home/vagrant/.ssh/id_rsa.pub >> /home/vagrant/.ssh/authorized_keys
         
         cd /vagrant
-       ./#{tag[i]}.sh
-        if [ $(hostname) == "authx" ]; then
+       ./create-#{tag[i]}.sh
+        if [ $(hostname) == "authx" ] && [ #{docker} -eq 0 ]; then
           cp /etc/ssl/certs/cacert.pem /vagrant
         fi
       SHELL
