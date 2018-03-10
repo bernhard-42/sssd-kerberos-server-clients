@@ -71,6 +71,7 @@ run.sh
 Copy all files in target to the machine where the LDAP-KDC container should run and call
 
 ```bash
+docker load ldap-*.docker
 ./run.sh
 ```
 
@@ -133,6 +134,11 @@ Valid starting       Expires              Service principal
 If `PHPLDAPADMIN` is `1` then `phpldapadmin` is configured at the port provided in `config.sh`.
 
 Call e.g. <http://$SERVER_IP:8389/phpldapadmin/>
+
+## Known Issues
+
+- On SLES 12 when Kerberos is active, user cannot change his/her password
+
 
 ## License
 

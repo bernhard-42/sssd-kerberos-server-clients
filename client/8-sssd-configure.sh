@@ -40,8 +40,8 @@ if [ ${USE_KRB5} -eq 1 ]; then
     cat << EOF >> /etc/sssd/sssd.conf
 auth_provider = krb5
 chpass_provider = krb5
-krb5_changepw_principle = kadmin/changepw
 krb5_server = ${KDC_IP}
+krb5_kpasswd = ${KDC_IP}
 krb5_realm = ${REALM}
 EOF
 else
@@ -67,10 +67,18 @@ fi
 
 if is_centos7; then
     authconfig --enablesssd --enablesssdauth --enablemkhomedir ${ENABLE_KRB5} --update
-else
+elif is_ubuntu16; then
     # Mean hack to overcome a bug in pam-auth-update
     echo -e "\nsession	optional			pam_mkhomedir.so" >> /etc/pam.d/common-session
     echo "/etc/pam.d/common-session edited manually -> take into account when calling pam-auth-update"
+elif is_sles12; then
+    sed -i 's|^passwd:.*|passwd: files sss|' /etc/nsswitch.conf
+    sed -i 's|^group:.*|group: files sss|' /etc/nsswitch.conf
+    sed -i 's|^services:.*|services: db files sss|' /etc/nsswitch.conf
+    echo "shadow: files sss" >> /etc/nsswitch.conf
+    pam-config -a --sss --mkhomedir
+else
+    logerr "OS not supprted"
 fi
 loginfo "done\n"
 

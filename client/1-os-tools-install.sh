@@ -16,8 +16,12 @@ loginfo "... done\n"
 loginfo "1.2 Installing OS tools"
 if is_centos7; then
     yum install -y ntp ntpdate rng-tools
-else
+elif is_ubuntu16; then
     export DEBIAN_FRONTEND=noninteractive
     apt-get install -y ntp rng-tools
+elif is_sles12; then
+    zypper install -y ntp rng-tools
+else
+    logerr "OS not supprted"
 fi
 loginfo "... done\n"

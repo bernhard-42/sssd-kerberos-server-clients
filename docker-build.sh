@@ -32,7 +32,7 @@ docker save -o ./target/${IMAGE}-${VERSION}.docker ${IMAGE}:${VERSION}
 
 cat << EOF > ./target/run.sh
 #!/bin/bash
-docker run -d -p 88:88 -p 389:389 -p 464:464 -p 636:636 -p 749:749 -p 8389:8389 --name ${NAME} --hostname ${SERVER_NAME}.${DOMAIN} ${IMAGE}:${VERSION}
+docker run -d -p 88:88 -p 389:389 -p 464:464 -p 636:636 -p 749:749 -p 8389:8389 --name ${NAME} ${IMAGE}:${VERSION}
 EOF
 chmod a+x ./target/run.sh
 

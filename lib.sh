@@ -37,6 +37,18 @@ function is_centos7 {
     fi    
 }
 
+function is_sles12 {
+    if grep -q SLES /etc/os-release; then 
+        if grep VERSION /etc/os-release  | grep -q "12-"; then
+            return 0
+        else
+            return 1
+        fi
+    else
+        return 1
+    fi    
+}
+
 function set_tz {
     TZ=$1
     if [[ $DOCKER -eq 1 ]]; then
