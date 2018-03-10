@@ -22,6 +22,21 @@ export LDAP_PASSWORD="ldapsecret"
 export LDAP_CERT_EXPIRY=3650
 export LDAP_CERT_CN="Bernhard Walter"
 
+# ------------ KRB5 ------------
+if [ $USE_KRB5 -eq 1 ]; then
+    export KDC_NAME="${SERVER_NAME}.${DOMAIN}"
+    export KDC_IP=${SERVER_IP}
+    export REALM=$(echo "$DOMAIN" | tr '[:lower:]' '[:upper:]')
+    export KDC_ADMIN="admin"
+    export KDC_PASSWORD="krb5secret"
+    export KDC_MASTER_KEY="mastersecret"
+fi
+
+# ------------ phpLADPadmin ------------
+if [ $PHPLDAPADMIN -eq 1 ]; then
+    export PHPLDAPADMIN_PORT=8389
+fi
+
 # ------------ Users and groups ------------
 DEFAULT_ADMIN_GROUP="admins"
 DEFAULT_GROUP="staff"
@@ -37,17 +52,3 @@ USERS="10002:bob:Bob:Black:${DEFAULT_PW}:${DEFAULT_GROUP},${GROUP1},${GROUP2} $U
 USERS="10003:mallory:Mallory:Mint:${DEFAULT_PW}:${DEFAULT_GROUP},${GROUP1},${GROUP2} $USERS"
 export USERS
 
-# ------------ KRB5 ------------
-if [ $USE_KRB5 -eq 1 ]; then
-    export KDC_NAME="${SERVER_NAME}.${DOMAIN}"
-    export KDC_IP=${SERVER_IP}
-    export REALM=$(echo "$DOMAIN" | tr '[:lower:]' '[:upper:]')
-    export KDC_ADMIN="admin"
-    export KDC_PASSWORD="krb5secret"
-    export KDC_MASTER_KEY="mastersecret"
-fi
-
-# ------------ PHPLADPADMIN ------------
-if [ $PHPLDAPADMIN -eq 1 ]; then
-    export PHPLDAPADMIN_PORT=8389
-fi
