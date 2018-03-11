@@ -24,9 +24,7 @@ offline_failed_login_delay = 5
 
 [domain/LDAP]
 id_provider = ldap
-; ldap_schema = rfc2307
-; ldap_schema = rfc2307bis
-ldap_uri = ldap://${LDAP_NAME}
+ldap_uri = ldaps://${LDAP_NAME}
 ldap_search_base = ${LDAP_BASE}
 enumerate = true
 cache_credentials = true
