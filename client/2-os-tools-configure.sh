@@ -33,12 +33,6 @@ loginfo "... done\n"
 loginfo "2.3 Setting time and ntpd"
 timedatectl set-timezone Europe/Berlin
 
-if is_centos7; then
-    ntpdate -b pool.ntp.org
-    systemctl enable ntpd
-    systemctl start ntpd
-fi
-
 loginfo "Validation"
 loginfo "date: $(date)"
 loginfo "... done\n"

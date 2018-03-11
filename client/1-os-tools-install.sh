@@ -15,7 +15,8 @@ loginfo "... done\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 loginfo "1.2 Installing OS tools"
 if is_centos7; then
-    yum install -y ntp ntpdate rng-tools
+    yum install -y ntp rng-tools
+    systemctl start ntpd
 elif is_ubuntu16; then
     export DEBIAN_FRONTEND=noninteractive
     apt-get install -y ntp rng-tools
