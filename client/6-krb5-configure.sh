@@ -15,8 +15,8 @@ cat > /etc/krb5.conf << EOF
 
 [realms]
     ${REALM} = {
-        kdc = ${KDC_IP}
-        admin_server = ${KDC_IP}
+        kdc = ${KDC_NAME}
+        admin_server = ${KDC_NAME}
     }
 
 [domain_realm]
