@@ -135,10 +135,6 @@ If `PHPLDAPADMIN` is `1` then `phpldapadmin` is configured at the port provided 
 
 Call e.g. <http://$SERVER_IP:8389/phpldapadmin/>
 
-## Known Issues
-
-- On SLES 12 when Kerberos is active, user cannot change his/her password
-
 
 ## License
 

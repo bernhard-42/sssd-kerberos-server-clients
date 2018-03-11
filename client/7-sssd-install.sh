@@ -13,7 +13,7 @@ elif is_ubuntu16; then
 elif is_sles12; then
     systemctl stop nscd
     systemctl disable nscd
-    zypper install -y sssd sssd-tools sssd-krb5 pam_ldap nss_ldap pam_krb5
+    zypper install -y sssd sssd-tools sssd-krb5 pam_krb5
 else
     logerr "OS not supprted"
 fi
