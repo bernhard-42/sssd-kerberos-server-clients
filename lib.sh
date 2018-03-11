@@ -85,6 +85,9 @@ function restart_service {
             service $SERVICE start
         fi
     else
+        if [ "x$2" == "x-r" ]; then
+            systemctl daemon-reload
+        fi
         systemctl restart ${SERVICE}
     fi
 }

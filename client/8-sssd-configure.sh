@@ -70,7 +70,7 @@ if is_centos7; then
 elif is_ubuntu16; then
     # Mean hack to overcome a bug in pam-auth-update
     echo -e "\nsession	optional			pam_mkhomedir.so" >> /etc/pam.d/common-session
-    echo "/etc/pam.d/common-session edited manually -> take into account when calling pam-auth-update"
+    logerror "/etc/pam.d/common-session edited manually -> take into account when calling pam-auth-update"
 elif is_sles12; then
     sed -i 's|^passwd:.*|passwd: files sss|' /etc/nsswitch.conf
     sed -i 's|^group:.*|group: files sss|' /etc/nsswitch.conf

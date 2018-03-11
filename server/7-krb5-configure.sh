@@ -79,6 +79,10 @@ cat > /etc/krb5.conf << EOF
     forwardable = true
     proxiable = true
 
+[logging]
+        kdc = FILE:/var/log/krb5/krb5kdc.log
+        admin_server = FILE:/var/log/krb5/kadmind.log
+        default = SYSLOG:NOTICE:DAEMON
 
 [realms]
     ${REALM} = {
@@ -142,8 +146,13 @@ loginfo "done\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 loginfo "7.5 Restarting KDC"
 
-start_service  krb5-kdc
-start_service  krb5-admin-server
+mkdir -p /var/log/krb5/
+chmod 700 /var/log/krb5/
+sed "/^ReadWriteDirectories/ s|$| /var/log/krb5|" /lib/systemd/system/krb5-kdc.service > /etc/systemd/system/krb5-kdc.service
+sed "/^ReadWriteDirectories/ s|$| /var/log/krb5|" /lib/systemd/system/krb5-admin-server.service > /etc/systemd/system/krb5-admin-server.service
+
+restart_service krb5-kdc -r
+restart_service krb5-admin-server -r
 loginfo "done\n"
 
 
