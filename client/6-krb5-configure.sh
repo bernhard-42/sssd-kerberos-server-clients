@@ -13,11 +13,6 @@ cat > /etc/krb5.conf << EOF
     forwardable = true
     proxiable = true
 
-[logging]
-        kdc = FILE:/var/log/krb5/krb5kdc.log
-        admin_server = FILE:/var/log/krb5/kadmind.log
-        default = SYSLOG:NOTICE:DAEMON
-        
 [realms]
     ${REALM} = {
         kdc = ${KDC_IP}

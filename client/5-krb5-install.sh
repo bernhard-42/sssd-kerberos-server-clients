@@ -15,7 +15,5 @@ elif is_sles12; then
 else
     logerr "OS not supprted"
 fi
-mkdir -p /var/log/krb5/
-chmod 700 /var/log/krb5/
 
 loginfo "done\n"
