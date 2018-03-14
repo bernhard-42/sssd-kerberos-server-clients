@@ -23,8 +23,7 @@ olcAccess: {1}to dn.base=""
 olcAccess: {2}to *
   by self write
   by dn="${LDAP_ADMIN}" write
-  by users read
-  by * auth
+  by * read
 EOF
 
 ldapmodify -Y EXTERNAL -H ldapi:/// -f /root/access.ldif
