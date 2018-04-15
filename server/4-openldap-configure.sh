@@ -1,6 +1,7 @@
 #!/bin/bash
-DIR=$(dirname $0) && source "$DIR/../config.sh" && source "$DIR/../lib.sh"
+set -o errexit ; set -o nounset
 
+DIR=$(dirname $0) && source "$DIR/../config.sh" && source "$DIR/../lib.sh"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 loginfo "4.1 Populating LDAP database"
@@ -26,7 +27,7 @@ loginfo "... done\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 loginfo "4.2 Configuring PHP LDAP"
 
-if [ ${PHPLDAPADMIN} -eq 1 ]; then
+if [[ ${USE_PHPLDAPADMIN} -eq 1 ]]; then
     
     sed -i "s|^\$servers->setValue('server','base',.*|\$servers->setValue('server','base',array('${LDAP_BASE}'));|" /etc/phpldapadmin/config.php
     sed -i "s|^\$servers->setValue('login','bind_id',.*|\$servers->setValue('login','bind_id','${LDAP_ADMIN}');|" /etc/phpldapadmin/config.php

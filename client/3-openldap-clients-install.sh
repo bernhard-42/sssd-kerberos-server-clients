@@ -1,6 +1,7 @@
 #!/bin/bash
-DIR=$(dirname $0) && source "$DIR/../config.sh" && source "$DIR/../lib.sh"
+set -o errexit ; set -o nounset
 
+DIR=$(dirname $0) && source "$DIR/../config.sh" && source "$DIR/../lib.sh"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 loginfo "3 Installing OpenLDAP client module"

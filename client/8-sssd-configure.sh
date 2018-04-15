@@ -1,6 +1,7 @@
 #!/bin/bash
-DIR=$(dirname $0) && source "$DIR/../config.sh" && source "$DIR/../lib.sh"
+set -o errexit ; set -o nounset
 
+DIR=$(dirname $0) && source "$DIR/../config.sh" && source "$DIR/../lib.sh"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 loginfo "8.1 Configuring NSS for SSSD"
@@ -57,7 +58,7 @@ loginfo "done\n"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 loginfo "8.2 Configuring PAM for SSSD"
-if [ ${USE_KRB5} -eq 1 ]; then
+if [[ ${USE_KRB5} -eq 1 ]]; then
     ENABLE_KRB5="--enablekrb5"
 else
     ENABLE_KRB5=""

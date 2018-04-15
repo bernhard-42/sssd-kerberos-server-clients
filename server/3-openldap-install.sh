@@ -1,8 +1,9 @@
 #!/bin/bash
+set -o errexit ; set -o nounset
+
 DIR=$(dirname $0) && source "$DIR/../config.sh" && source "$DIR/../lib.sh"
 
 export DEBIAN_FRONTEND=noninteractive
-
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 loginfo "3.1 Installing LDAP utilities"
@@ -29,7 +30,7 @@ EOF
 cat /root/debconf-slapd.conf | debconf-set-selections
 apt-get install -y ldap-utils slapd
 rm /root/debconf-slapd.conf
-start_service slapd -d
+start_service slapd
 
 loginfo "3.2 Validation"
 loginfo "LDAP admin in $(ldapsearch -x -LLL -H ldap:/// -b ${LDAP_BASE} dn)"
@@ -38,8 +39,8 @@ loginfo "... done\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 loginfo "3.3 Installing PHPLdapAdmin"
 
-if [ ${PHPLDAPADMIN} -eq 1 ]; then
+if [[ ${USE_PHPLDAPADMIN} -eq 1 ]]; then
     apt-get install -y phpldapadmin
-    start_service apache2 -d
+    start_service apache2
 fi
 loginfo "... done\n"

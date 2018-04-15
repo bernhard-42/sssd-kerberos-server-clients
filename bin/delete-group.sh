@@ -1,10 +1,12 @@
 #!/bin/bash
 DIR=$(dirname $0) && source "$DIR/../config.sh" && source "$DIR/../lib.sh"
 
-if [ "x$1" == "x" ]; then
+if [[ -z $1 ]]; then
     echo "Usage: $(basename $0)" '<group-name>'
     exit 1
 fi
+
+set -o errexit ; set -o nounset
 
 GROUP_NAME=${1/\%20/ }
 

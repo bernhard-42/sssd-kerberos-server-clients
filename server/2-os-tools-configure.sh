@@ -1,4 +1,6 @@
 #!/bin/bash
+set -o errexit ; set -o nounset
+
 DIR=$(dirname $0) && source "$DIR/../config.sh" && source "$DIR/../lib.sh"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

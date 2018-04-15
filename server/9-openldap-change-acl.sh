@@ -1,9 +1,12 @@
 #!/bin/bash
+set -o errexit ; set -o nounset
+
 DIR=$(dirname $0) && source "$DIR/../config.sh" && source "$DIR/../lib.sh"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 loginfo "9 Changing Access Control"
-if [ $USE_KRB5 -eq 1 ]; then
+
+if [[ $USE_KRB5 -eq 1 ]]; then
     ATTRS="userPassword,shadowLastChange,krbPrincipalKey"
 else
     ATTRS="userPassword,shadowLastChange"

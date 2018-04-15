@@ -1,10 +1,12 @@
 #!/bin/bash
 DIR=$(dirname $0) && source "$DIR/../config.sh" && source "$DIR/../lib.sh"
 
-if [ "x$6" == "x" ]; then
+if [[ -z $6 ]]; then
     echo "Usage: $(basename $0)" '<uid-number> <uid> <first-name> <surname> <password> <group-name1,group-name2,...>'
     exit 1
 fi
+
+set -o errexit ; set -o nounset
 
 UID_NUMBER=$1
 U_ID=$2
