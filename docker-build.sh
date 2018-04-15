@@ -13,7 +13,7 @@ else
     NAME="ldap"
     KRB5_PORTS=""
 fi
-if [ $PHPLDAPADMIN -eq 1 ]; then
+if [ $USE_PHPLDAPADMIN -eq 1 ]; then
     PHP_PORT="-p 8389:8389"
 else
     PHP_PORT=""
