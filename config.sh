@@ -1,10 +1,3 @@
-#  ------------ Align with Vagrantfile ------------ 
-export DOMAIN=poc.acme.local         # CAUTION: Edit it, but don't rename or remove it (it is parsed in Vagrantfile) !
-export SERVER_IP=192.168.56.10       # CAUTION: Edit it, but don't rename or remove it (it is parsed in Vagrantfile) !
-export DOCKER=1                      # CAUTION: Edit it, but don't rename or remove it (it is parsed in Vagrantfile) !
-
-export SERVER_NAME=authx
-
 # ------------ Common settings ------------
 export TZ=Europe/Berlin
 export REPO_PATH=$(pwd)
@@ -21,7 +14,7 @@ export LDAP_ADMIN="cn=admin,${LDAP_BASE}"
 export LDAP_PASSWORD="ldapsecret"
 
 export LDAP_CERT_EXPIRY=3650
-export LDAP_CERT_CN="Bernhard Walter"
+export LDAP_CERT_CN="${LDAP_ORG}"
 
 # ------------ KRB5 ------------
 if [ $USE_KRB5 -eq 1 ]; then
