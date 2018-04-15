@@ -148,7 +148,7 @@ Edit `config.sh` and adapt at least `LDAP_ORG` , `USE_KRB5`.
 
 ## 5 LDAP Admin UI
 
-If `PHPLDAPADMIN` is `1` then `phpldapadmin` is configured at the port provided in `config.sh`.
+If `USE_PHPLDAPADMIN` is `1` then `phpldapadmin` is configured at the port provided in `config.sh`.
 
 Call e.g. <http://$SERVER_IP:8389/phpldapadmin/>
 
