@@ -6,14 +6,14 @@ source ./config-standalone.sh
 source ./config.sh
 source ./lib.sh
 
-if [ ${USE_KRB5} -eq 1 ]; then
+if [[ ${USE_KRB5} -eq 1 ]]; then
     NAME="ldap-kdc"
     KRB5_PORTS="-p 464:464 -p 749:749"
 else
     NAME="ldap"
     KRB5_PORTS=""
 fi
-if [ $USE_PHPLDAPADMIN -eq 1 ]; then
+if [[ $USE_PHPLDAPADMIN -eq 1 ]]; then
     PHP_PORT="-p 8389:8389"
 else
     PHP_PORT=""
@@ -32,6 +32,7 @@ docker build --build-arg DOMAIN=${DOMAIN} \
              -t ${IMAGE}:${VERSION} \
              .
 RET=$?
+rm -f installer.tar.gz  # clean up
 [[ $RET -ne 0 ]] && exit $RET
 
 loginfo "Saving docker image ${IMAGE}:${VERSION} ..."
@@ -58,7 +59,7 @@ chmod a+x ./run.sh
 
 tar -zcf server.tgz ${IMAGE}-${VERSION}.docker run.sh
 
-rm ${IMAGE}-${VERSION}.docker run.sh
+rm ${IMAGE}-${VERSION}.docker # run.sh
 
 loginfo "Results in ./target:"
 ls -lh
