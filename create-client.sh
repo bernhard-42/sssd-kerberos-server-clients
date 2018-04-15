@@ -1,5 +1,19 @@
 #!/bin/bash
-DIR=$(dirname $0) && source "$DIR/config.sh"
+
+DIR=$(dirname $0)
+
+if [[ $VAGRANT -eq 1 ]]; then
+    USAGE="Usage: $(basename $0)  domain  server-ip  server-name"
+    export DOMAIN=${1:?$USAGE}
+    export SERVER_IP=${2:?$USAGE}
+    export SERVER_NAME=${3:?$USAGE}
+    echo "Using vagrant config"
+else
+    source "$DIR/config-standalone.sh"
+    echo "Using standalone config"
+fi
+
+source "$DIR/config.sh"
 
 ${REPO_PATH}/client/1-os-tools-install.sh
 ${REPO_PATH}/client/2-os-tools-configure.sh

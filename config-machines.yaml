@@ -1,0 +1,30 @@
+domain: acme.localdomain
+hosts:
+  - name:     "authx"
+    ip:       "192.168.56.10"
+    memory:   1024
+    cpus:     1
+    tag:      "server"
+    image:    "bento/ubuntu-16.04"
+
+  - name:     "c73"
+    ip:       "192.168.56.11"
+    memory:   1024
+    cpus:     1
+    tag:      "client"
+    image:    "bento/centos-7.3"
+
+  - name:     "u1604"
+    ip:       "192.168.56.12"
+    memory:   1024  
+    cpus:     1  
+    tag:      "client"  
+    image:    "bento/ubuntu-16.04"
+
+  - name:     "docker"
+    ip:       "192.168.56.20"
+    memory:   20148
+    cpus:     1
+    tag:      "docker-host"
+    image:    "bento/ubuntu-16.04"
+

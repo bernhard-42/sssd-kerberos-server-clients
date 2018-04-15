@@ -1,11 +1,16 @@
 FROM ubuntu:16.04
 
-ENV DEBIAN_FRONTEND noninteractive
-ENV DOCKER=1
+ARG DOMAIN
+ARG SERVER_NAME
+ARG SERVER_IP
+
+ARG DEBIAN_FRONTEND=noninteractive
+ARG DOCKER=1
 
 ADD installer.tar.gz /root/
 RUN apt-get update && \
     apt-get -y install tzdata iputils-ping nano && \
-    cd /root && ./create-server.sh
+    cd /root && \
+    bash -o errexit ./create-server.sh $DOMAIN $SERVER_IP $SERVER_NAME
 
 CMD /root/server/docker-run.sh
