@@ -81,7 +81,8 @@ function restart_service {
             apachectl restart
         else
             service $SERVICE stop
-            killall slapd
+            sleep 1
+            killall $SERVICE
             service $SERVICE start
         fi
     else
