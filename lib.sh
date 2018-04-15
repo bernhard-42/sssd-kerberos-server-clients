@@ -14,82 +14,65 @@ function logerror {
 }
 
 function is_ubuntu16 {
-    if grep -q ubuntu /etc/os-release; then 
-        if grep VERSION_ID /etc/os-release  | grep -q 16; then
-            return 0
-        else
-            return 1
-        fi
-    else
-        return 1
-    fi
+    grep -q ubuntu /etc/os-release && grep VERSION_ID /etc/os-release | grep -q 16
+    return $?
 }
 
 function is_centos7 {
-    if grep -q rhel /etc/os-release; then 
-        if grep VERSION_ID /etc/os-release  | grep -q 7; then
-            return 0
-        else
-            return 1
-        fi
-    else
-        return 1
-    fi    
+    grep -q rhel /etc/os-release && grep VERSION_ID /etc/os-release | grep -q 7
+    return $?
 }
 
 function is_sles12 {
-    if grep -q SLES /etc/os-release; then 
-        if grep VERSION /etc/os-release  | grep -q "12-"; then
-            return 0
-        else
-            return 1
-        fi
-    else
-        return 1
-    fi    
+    grep -q SLES /etc/os-release && grep VERSION /etc/os-release | grep -q "12-"
+    return $?
 }
 
 function set_tz {
-    TZ=$1
-    if [[ $DOCKER -eq 1 ]]; then
-        ln -snf /usr/share/zoneinfo/$TZ /etc/localtime
-        echo $TZ > /etc/timezone
+    local tz="${1:?Parm 1 (TZ) must be set}"
+
+    if [[ ${DOCKER} -eq 1 ]]; then
+        ln -snf /usr/share/zoneinfo/${tz} /etc/localtime
+        echo ${tz} > /etc/timezone
     else
-        timedatectl set-timezone $TZ
+        timedatectl set-timezone ${tz}
     fi
 }
 
 function start_service {
-    SERVICE=$1
-    if [[ $DOCKER -eq 1 ]]; then
-        if [ $SERVICE == apache2 ]; then
+    local service="${1:?Parm 1 (service) must be set}"
+
+    if [[ ${DOCKER} -eq 1 ]]; then
+        if [[ "${service}" == apache2 ]]; then
             apachectl start
         else
-            service $SERVICE start
+            service "${service}" start
         fi
     else
-        if [ -z "$2" ]; then
-            systemctl start ${SERVICE}
-        fi
+        systemctl start "${service}"
     fi
 }
 
 function restart_service {
-    SERVICE=$1
-    if [[ $DOCKER -eq 1 ]]; then
-        if [ $SERVICE == apache2 ]; then
+    local service="${1:?Parm 1 (service) must be set}"
+    local flag=${2:-""}
+
+    if [[ ${DOCKER} -eq 1 ]]; then
+        if [ "${service}" == apache2 ]; then
             apachectl restart
         else
-            service $SERVICE stop
+            set +e
+            service "${service}" stop
             sleep 1
-            killall $SERVICE
-            service $SERVICE start
+            killall "${service}"
+            set -e
+            service "${service}" start
         fi
     else
-        if [ "x$2" == "x-r" ]; then
+        if [[ ${flag} == "-r" ]]; then
             systemctl daemon-reload
         fi
-        systemctl restart ${SERVICE}
+        systemctl restart "${service}"
     fi
 }
 
