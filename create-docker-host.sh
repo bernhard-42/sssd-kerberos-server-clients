@@ -1,6 +1,12 @@
 #!/bin/bash
+set -o errexit ; set -o nounset
 
 DIR=$(dirname $0)
+
+# Add defaults to variables controlling the setup system
+VAGRANT=${VAGRANT:-0}
+DOCKER=${DOCKER:-0}
+export DOCKER
 
 if [[ $VAGRANT -eq 1 ]]; then
     USAGE="Usage: $(basename $0)  domain  server-ip  server-name"
@@ -9,11 +15,16 @@ if [[ $VAGRANT -eq 1 ]]; then
     export SERVER_NAME=${3:?$USAGE}
     echo "Using vagrant config"
 else
-    source "$DIR/config-standalone.sh"
+
+    source "${DIR}/config-standalone.sh"
     echo "Using standalone config"
 fi
 
-source "$DIR/config.sh"
+source "${DIR}/config.sh"
+
+# Main
+
+export DEBIAN_FRONTEND=noninteractive
 
 apt-get update
 apt-get install \
