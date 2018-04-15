@@ -1,8 +1,8 @@
 # ------------ Common settings ------------
 export TZ=Europe/Berlin
 export REPO_PATH=$(pwd)
-export USE_KRB5=1                    # Edit KRB5 section below, if set to 1
-export PHPLDAPADMIN=1                # Edit PHPLADPADMIN section below, if set to 1
+export USE_KRB5=1           # Edit KRB5 section below, if set to 1
+export USE_PHPLDAPADMIN=1   # Edit PHPLDAPADMIN section below, if set to 1
 
 # ------------ LDAP ------------
 export LDAP_ORG="Acme AG"
@@ -17,7 +17,7 @@ export LDAP_CERT_EXPIRY=3650
 export LDAP_CERT_CN="${LDAP_ORG}"
 
 # ------------ KRB5 ------------
-if [ $USE_KRB5 -eq 1 ]; then
+if [[ $USE_KRB5 -eq 1 ]]; then
     export KDC_NAME="${SERVER_NAME}.${DOMAIN}"
     export KDC_IP=${SERVER_IP}
     export REALM=$(echo "$DOMAIN" | tr '[:lower:]' '[:upper:]')
@@ -26,8 +26,8 @@ if [ $USE_KRB5 -eq 1 ]; then
     export KDC_MASTER_KEY="mastersecret"
 fi
 
-# ------------ phpLADPadmin ------------
-if [ $PHPLDAPADMIN -eq 1 ]; then
+# ------------ PHPLDAPADMIN ------------
+if [[ $USE_PHPLDAPADMIN -eq 1 ]]; then
     export PHPLDAPADMIN_PORT=8389
 fi
 
