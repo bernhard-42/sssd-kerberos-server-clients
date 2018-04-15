@@ -146,7 +146,7 @@ Edit `config.sh` and adapt at least `LDAP_ORG` , `USE_KRB5`.
         renew until 01/28/2018 12:45:00
     ```
 
-## 4 LDAP Admin UI
+## 5 LDAP Admin UI
 
 If `PHPLDAPADMIN` is `1` then `phpldapadmin` is configured at the port provided in `config.sh`.
 
