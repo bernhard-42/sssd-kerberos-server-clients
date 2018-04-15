@@ -2,132 +2,149 @@
 
 ## 1 Using Vagrant
 
-### 1.1 Create Authentication Server
+Define the domain and the machines to be used by editing `config-machines.yaml`. Each host definition has the format
 
-Edit `config.sh` and adapt at least `DOMAIN` , `IP_PREFIX` , `SERVER_SUFFIX` , `LDAP_ORG` , `USE_KRB5`.
+```yaml
+- name:     "authx"
+  ip:       "192.168.56.10"
+  memory:   1024
+  cpus:     1
+  tag:      "server"
+  image:    "bento/ubuntu-16.04"
+```
+
+and can then be started with vagrant by its `name` attribute, e.g.:
 
 ```bash
 vagrant up authx
 ```
 
-### 1.2 Create Centos 7.3 client
+For this section, if you use the folder holding `config.sh` and all script folders then they are shared between all machines via the folder `/vagrant` in each guest (which is automatically shared by Vagrant between guest and host for the provider Virtualbox).
 
-Copy `config.sh` and `/etc/ssl/certs/cacert.pem` from server (`authx`) to the installer directory on the client.
+Edit `config.sh` and adapt at least `LDAP_ORG` , `USE_KRB5`.
 
-```bash
-vagrant up c73
-```
+- **Create Authentication Server**
 
-### 1.3 Create Ubuntu 16.04 client
+    ```bash
+    vagrant up authx
+    ```
 
-Copy `config.sh` and `/etc/ssl/certs/cacert.pem` from server (`authx`) to the installer directory on the client.
+- **Create Centos 7.3 client**
 
-```bash
-vagrant up u1604
-```
+    ```bash
+    vagrant up c73
+    ```
+
+- **Create Ubuntu 16.04 client**
+
+    ```bash
+    vagrant up u1604
+    ```
 
 ## 2 On existing machines
 
-### 2.1 Create Authentication Server
+- **Create Authentication Server**
 
-Clone the project to an Ubuntu 16.04 (!) machine and edit `config.sh` to at least adapt `DOMAIN` , `IP_PREFIX` , `SERVER_SUFFIX` , `LDAP_ORG` , `USE_KRB5`.
+    Clone the project to an Ubuntu 16.04 (!) machine and edit 
 
-```bash
-sudo server.sh
-```
+    - `config-standalone.sh` and adapt domain and server address
+    - `config.sh` to at least adapt `LDAP_ORG` , `USE_KRB5`
 
-### 2.2 Create Ubuntu 16.04 or Centos 7.3 client
+    Then execute
 
-Clone the project to the Ubuntu 16.04 or Centos 7.3 machine and copy `config.sh` and `/etc/ssl/certs/cacert.pem` from server (`authx`) to the installer directory on the client.
+    ```bash
+    sudo create-server.sh
+    ```
 
-```bash
-sudo client.sh
-```
+- **Create Ubuntu 16.04 or Centos 7.3 client**
+
+    Clone the project to the Ubuntu 16.04 or Centos 7.3 machine and copy `config-standalone.sh`, `config.sh` and `/etc/ssl/certs/cacert.pem` from the server to the installer directory on the client.
+
+    Then execute
+
+    ```bash
+    sudo create-client.sh
+    ```
 
 ## 3 Using docker
 
-### 3.1 Create docker image
+- **Create docker image**
 
-Clone the project to machine running docker and edit `config.sh` to at least adapt  `DOMAIN` , `IP_PREFIX` , `SERVER_SUFFIX` , `LDAP_ORG` , `USE_KRB5`.
+    Clone the project to machine running docker and edit 
 
-```bash
-IMAGE_VERSION=1.0.1
-./docker-build.sh $IMAGE_VERSION
-```
+    - `config-standalone.sh` and adapt domain and server address
+    - `config.sh` to at least adapt `LDAP_ORG` , `USE_KRB5`
 
-Results in ./target:
+    Then execute
 
-```bash
-cacert.pem
-client-installer.tgz
-config.sh
-ldap-kdc-poc.acme.local-1.0.1.docker
-lib.sh
-run.sh
-```
+    ```bash
+    IMAGE_VERSION=1.0.1
+    ./docker-build.sh $IMAGE_VERSION
+    ```
 
-### 3.2 Server
+    Results in ./target:
 
-Copy all files in target to the machine where the LDAP-KDC container should run and call
+    ```bash
+    client-installer.tgz
+    server.tgz
+    ```
 
-```bash
-docker load ldap-*.docker
-./run.sh
-```
+- **Start docker container on (server)**
 
-### 3.3 Clients
+    Copy all files from `target` to the machine where the LDAP-KDC container should run and call
 
-Copy all files in target to the machine that is a client of the LDAP-KDC and call
+    ```bash
+    tar -zxvf server.tgz
+    docker load ldap-*.docker
+    ./run.sh
+    ```
 
-```bash
-tar -zxf client-installer.tgz
-./client.sh
-```
+- **Install and configure Clients**
+
+    Copy all files from `target` to the machine that is a client of the LDAP-KDC and call
+
+    ```bash
+    tar -zxf client-installer.tgz
+    ./client.sh
+    ```
 
 ## 4 Test
 
-### 4.1 Test LDAP
+- **Test LDAP**
 
-Check Authentication against LDAP only
+    Check Authentication against LDAP only
 
-```bash
-ldapwhoami -x -H ldap://authx.$DOMAIN -D "uid=alice,ou=People,$BASE" -w $PASSWORD
-```
+    ```bash
+    ldapwhoami -x -H ldap://authx.$DOMAIN -D "uid=alice,ou=People,$BASE" -w $PASSWORD
+    ```
 
-### 4.2 Test SSSD
+- **Test SSSD**
 
-Log into Centos 7.3 machine (c73)
+    Log into client machine and check sssd
 
-```bash
-vagrant ssh c73
-```
+    ```bash
+    (vagrant)> id alice
+    uid=10001(alice) gid=10001(alice) Gruppen=10001(alice),10040(all users),10060(acme users),10020(staff)
 
-and check sssd
+    (vagrant)> su -l bob
+    Password:
+    Creating directory '/home/bob'.
 
-```bash
-(vagrant)> id alice
-uid=10001(alice) gid=10001(alice) Gruppen=10001(alice),10040(all users),10060(acme users),10020(staff)
+    (bob)> id
+    uid=10002(bob) gid=10002(bob) groups=10002(bob),10020(staff),10040(all users),10060(acme_users)
+    ```
 
+    If Kerberos is configured (`USE_KRB5=1` in `config.sh`) a ticket should be created:
 
-(vagrant)> su -l bob
-Password:
-Creating directory '/home/bob'.
+    ```bash
+    (bob)> klist
+    Ticket cache: FILE:/tmp/krb5cc_10003_aYp5PL
+    Default principal: mallory@ACME.LOCALDOMAIN
 
-(bob)> id
-uid=10002(bob) gid=10002(bob) groups=10002(bob),10020(staff),10040(all users),10060(acme_users)
-```
-
-If Kerberos is configured (`USE_KRB5=1` in `config.sh`) a ticket should be created:
-
-```bash
-(bob)> klist
-Ticket cache: FILE:/tmp/krb5cc_10003_aYp5PL
-Default principal: mallory@ACME.LOCALDOMAIN
-
-Valid starting       Expires              Service principal
-01/27/2018 12:45:00  01/27/2018 22:45:00  krbtgt/ACME.LOCALDOMAIN@ACME.LOCALDOMAIN
-    renew until 01/28/2018 12:45:00
-```
+    Valid starting       Expires              Service principal
+    01/27/2018 12:45:00  01/27/2018 22:45:00  krbtgt/ACME.LOCALDOMAIN@ACME.LOCALDOMAIN
+        renew until 01/28/2018 12:45:00
+    ```
 
 ## 4 LDAP Admin UI
 
