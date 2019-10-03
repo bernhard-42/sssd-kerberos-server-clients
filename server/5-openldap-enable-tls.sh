@@ -72,9 +72,7 @@ loginfo "... done\n"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 loginfo "5.7 Restart slapd"
 if [[ $DOCKER -eq 1 ]]; then
-    service slapd stop
-    killall slapd         # sometimes doesn't stop
-    service slapd start
+    restart_service slapd
 else
     systemctl restart slapd
 fi

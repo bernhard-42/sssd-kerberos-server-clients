@@ -64,7 +64,7 @@ function restart_service {
             set +e
             service "${service}" stop
             sleep 1
-            killall "${service}"
+            pkill "${service}" || echo "nothing to be killed"
             set -e
             service "${service}" start
         fi

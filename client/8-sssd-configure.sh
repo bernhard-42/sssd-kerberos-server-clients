@@ -83,7 +83,9 @@ loginfo "done\n"
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-loginfo "8.3 Restarting SSSD"
-systemctl reload sshd
-systemctl restart sssd
-loginfo "done\n"
+if [ $DOCKER -eq 0 ] ; then
+    loginfo "8.3 Restarting SSSD"
+    systemctl reload sshd
+    systemctl restart sssd
+    loginfo "done\n"
+fi

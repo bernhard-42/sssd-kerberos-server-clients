@@ -33,7 +33,7 @@ loginfo "... done\n"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 loginfo "2.3 Setting time and ntpd"
-timedatectl set-timezone Europe/Berlin
+set_tz Europe/Berlin
 
 loginfo "Validation"
 loginfo "date: $(date)"
