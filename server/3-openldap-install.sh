@@ -41,8 +41,8 @@ loginfo "3.3 Installing PHPLdapAdmin"
 
 if [[ ${USE_PHPLDAPADMIN} -eq 1 ]]; then
     apt-get install -y phpldapadmin
-    sed -i "s/:80/:$LDAP_PHP_ADMIN_PORT/" /etc/apache2/sites-enabled/000-default.conf
-    sed -i "s/ 80/ $LDAP_PHP_ADMIN_PORT/" /etc/apache2/ports.conf
+    sed -i "s/:80/:${PHPLDAPADMIN_PORT}/" /etc/apache2/sites-enabled/000-default.conf
+    sed -i "s/ 80/ ${PHPLDAPADMIN_PORT}/" /etc/apache2/ports.conf
     start_service apache2
 fi
 loginfo "... done\n"

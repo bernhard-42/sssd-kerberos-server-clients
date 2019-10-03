@@ -8,7 +8,7 @@ loginfo "7 Installing SSSD"
 
 if is_centos7; then
     yum install -y sssd sssd-tools
-elif is_ubuntu16; then
+elif is_ubuntu18; then
     export DEBIAN_FRONTEND=noninteractive
     apt-get install -y sssd sssd-tools
 elif is_sles12; then

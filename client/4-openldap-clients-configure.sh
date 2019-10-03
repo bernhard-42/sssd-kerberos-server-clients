@@ -6,7 +6,7 @@ DIR=$(dirname $0) && source "$DIR/../config.sh" && source "$DIR/../lib.sh"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 loginfo "4 Install CA certificate"
 
-if is_ubuntu16; then
+if is_ubuntu18; then
     LDAP_CONF=/etc/ldap/ldap.conf
 else
     LDAP_CONF=/etc/openldap/ldap.conf

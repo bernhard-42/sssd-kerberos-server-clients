@@ -13,8 +13,8 @@ function logerror {
     echo -e "${RED} >>>>> $@${NC}"
 }
 
-function is_ubuntu16 {
-    grep -q ubuntu /etc/os-release && grep VERSION_ID /etc/os-release | grep -q 16
+function is_ubuntu18 {
+    grep -q ubuntu /etc/os-release && grep VERSION_ID /etc/os-release | grep -q 18
     return $?
 }
 

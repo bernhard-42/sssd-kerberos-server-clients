@@ -28,12 +28,11 @@ loginfo "... done\n"
 loginfo "4.2 Configuring PHP LDAP"
 
 if [[ ${USE_PHPLDAPADMIN} -eq 1 ]]; then
-    
+
     sed -i "s|^\$servers->setValue('server','base',.*|\$servers->setValue('server','base',array('${LDAP_BASE}'));|" /etc/phpldapadmin/config.php
     sed -i "s|^\$servers->setValue('login','bind_id',.*|\$servers->setValue('login','bind_id','${LDAP_ADMIN}');|" /etc/phpldapadmin/config.php
     sed -i "s|^\$config->custom->appearance['hide_template_warning'] = .*|\$config->custom->appearance['hide_template_warning'] = true;|" /etc/phpldapadmin/config.php
 
-    sed -i "s|^Listen.*|Listen ${PHPLDAPADMIN_PORT}|" /etc/apache2/ports.conf
     restart_service apache2
 
     loginfo "LDP Admin Tool: http://$(hostname -i):${PHPLDAPADMIN_PORT}/phpldapadmin/"

@@ -18,7 +18,7 @@ loginfo "1.2 Installing OS tools"
 if is_centos7; then
     yum install -y ntp rng-tools
     systemctl start ntpd
-elif is_ubuntu16; then
+elif is_ubuntu18; then
     export DEBIAN_FRONTEND=noninteractive
     apt-get install -y ntp rng-tools
 elif is_sles12; then

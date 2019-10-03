@@ -5,7 +5,7 @@ DIR=$(dirname $0)
 
 # Add defaults to variables controlling the setup system
 VAGRANT=${VAGRANT:-0}
-DOCKER=${DOCKER:-0}
+DOCKER=${4:-0}
 export DOCKER
 
 if [[ ${VAGRANT} -eq 1 ]]; then

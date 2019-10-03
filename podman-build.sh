@@ -36,11 +36,11 @@ rm -f installer.tar.gz  # clean up
 [[ $RET -ne 0 ]] && exit $RET
 
 loginfo "Saving podman image ${IMAGE}:${VERSION} ..."
-podman save -o ./target/${IMAGE}-${VERSION}.podman ${IMAGE}:${VERSION} 
+podman save -o ./target/${IMAGE}-${VERSION}.podman ${IMAGE}:${VERSION}
 
 loginfo "Extracting CA certificate from podman images ..."
 podman rm -f ldap-build 2> /dev/null
-podman run -d --name ldap-build ${IMAGE}:${VERSION} 
+podman run -d --name ldap-build ${IMAGE}:${VERSION}
 podman cp ldap-build:/etc/ssl/certs/cacert.pem .
 podman rm -f ldap-build
 

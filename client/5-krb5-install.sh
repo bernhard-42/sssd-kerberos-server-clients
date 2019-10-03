@@ -8,7 +8,7 @@ loginfo "5 Installing Kerberos modules"
 
 if is_centos7; then
     yum install -y krb5-workstation pam_krb5
-elif is_ubuntu16; then
+elif is_ubuntu18; then
     export DEBIAN_FRONTEND=noninteractive
     apt-get install -y krb5-user
 elif is_sles12; then

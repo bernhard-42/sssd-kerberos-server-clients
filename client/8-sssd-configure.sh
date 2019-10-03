@@ -66,7 +66,7 @@ fi
 
 if is_centos7; then
     authconfig --enablesssd --enablesssdauth --enablemkhomedir ${ENABLE_KRB5} --update
-elif is_ubuntu16; then
+elif is_ubuntu18; then
     # Mean hack to overcome a bug in pam-auth-update
     echo -e "\nsession	optional			pam_mkhomedir.so" >> /etc/pam.d/common-session
     logerror "/etc/pam.d/common-session edited manually -> take into account when calling pam-auth-update"
@@ -83,9 +83,11 @@ loginfo "done\n"
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-if [ $DOCKER -eq 0 ] ; then
-    loginfo "8.3 Restarting SSSD"
+loginfo "8.3 Restarting SSSD"
+if [[ $DOCKER -eq 0 ]]; then
     systemctl reload sshd
-    systemctl restart sssd
-    loginfo "done\n"
 fi
+restart_service ssh
+sleep 1
+start_service sssd
+loginfo "done\n"
